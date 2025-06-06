@@ -1,24 +1,24 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import userRoutes from './routes/Users.js';
-import albumRoutes from './routes/Albums.js';
-import songRoutes from './routes/Songs.js';
-import playlistRoutes from './routes/Playlists.js'; 
-import commentRoutes from './routes/Comments.js';
-import likesLovesRoutes from './routes/Likes-loves.js';
+// import bodyParser from 'body-parser';
+// import userRoutes from './routes/Users.js';
+// import albumRoutes from './routes/Albums.js';
+// import songRoutes from './routes/Songs.js';
+// import playlistRoutes from './routes/Playlists.js'; 
+// import commentRoutes from './routes/Comments.js';
+// import likesLovesRoutes from './routes/Likes-loves.js';
 import cors from 'cors';
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors()); 
-app.use(bodyParser.json());
-app.use('/users', userRoutes);
-app.use('/albums', albumRoutes);
-app.use('/songs', songRoutes);
-app.use('/playlists', playlistRoutes);
-app.use('/comments', commentRoutes);
-app.use('/likes-loves', likesLovesRoutes);
+// app.use(cors()); 
+// app.use(bodyParser.json());
+// app.use('/users', userRoutes);
+// app.use('/albums', albumRoutes);
+// app.use('/songs', songRoutes);
+// app.use('/playlists', playlistRoutes);
+// app.use('/comments', commentRoutes);
+// app.use('/likes-loves', likesLovesRoutes);
 
 //for testing 
 app.listen(PORT, () => {
