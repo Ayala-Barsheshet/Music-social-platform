@@ -8,9 +8,9 @@ import {
   deleteSong
 } from '../controllers/Songs.js';
 
-router.use(auth); //every rout below this code will pass first in auth before executing the controller
-
 const router = express.Router();
+
+router.use(auth); //every rout below this code will pass first in auth before executing the controller
 
 router.get('/', getAllSongs);
 router.get('/:id', getSongById);

@@ -24,8 +24,8 @@ export const serviceGetSongById = async (id, accessType) => {
 };
 
 export const serviceAddSong = async (album_id, name, lyrics, artist_name, genre, file_path, accessType) => {
-    try {
-        const approved = 0; // Default to not approved
+    try {        
+       let approved = 0; // Default to not approved
         if (accessType === 'admin') {// If the user is an admin, set approved to 1
             approved = 1;
         }
