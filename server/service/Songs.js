@@ -1,10 +1,14 @@
-import con from '../DB/mysql.js';
-import db from '../DB/mysql.js';
 
+import db from '../DB/mysql.js';
 export const serviceGetAllSongs = async (accessType) => {
     try {
-        //אם אתה מנהל ואתה בדף הרשאות אז תביא את כל האפרובד 0
-        const query = 'SELECT * FROM songs WHERE approved = 1';
+        // מביא את כל השירים עם שם האלבום שלהם
+        const query = `
+            SELECT songs.*, albums.name AS album_name
+            FROM songs
+            JOIN albums ON songs.album_id = albums.id
+            WHERE songs.approved = 1
+        `;
         const [results] = await db.promise().query(query);
         return results;
     } catch (err) {

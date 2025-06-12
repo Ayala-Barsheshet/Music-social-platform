@@ -1,5 +1,6 @@
 import express from 'express';
-import auth from '../authMiddleware.js';
+import auth from '../auth/authMiddleware.js';
+
 import {
   updateLikeField,
   getLikeStatus

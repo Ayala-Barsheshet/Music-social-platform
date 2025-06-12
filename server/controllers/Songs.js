@@ -9,6 +9,7 @@ import {
 export const getAllSongs = async (req, res) => {
     try {
         const accessType = req.user.accessType;  //access type from the request, got it from the token
+        console.log(`Access type: ${accessType}`);
         const Songs = await serviceGetAllSongs(accessType);
         res.status(200).json(Songs);
     } catch (error) {

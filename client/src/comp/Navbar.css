@@ -1,6 +1,6 @@
 .navbar {
   width: 220px;
-  background-color: #1f1f1f;
+  background-color: #ffffff;
   padding: 20px;
   height: 100vh;
 }
@@ -20,7 +20,7 @@
 }
 
 .nav-links a {
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
 }
 

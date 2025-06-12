@@ -1,0 +1,62 @@
+.song-search-page {
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
+
+.search-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.search-controls select,
+.search-controls input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 180px;
+}
+
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.songs-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* בדיוק 5 בעמודה */
+    gap: 1rem;
+}
+
+.song-card {
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.song-card:hover {
+  background: #f7f7f7;
+}
+
+.album-group {
+  margin-bottom: 32px;
+}
+
+.album-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.album-songs {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 8px;
+}
