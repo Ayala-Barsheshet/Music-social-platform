@@ -1,5 +1,6 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
+import Login  from "../pages/Auth/Login";
 import Home from "../pages/Home";
 import Library from "../pages/Library";
 import Search from "../pages/Search";
@@ -9,7 +10,9 @@ import Settings from "../pages/Settings";
 const MainRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/home" element={<Home />} /> 
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/library" element={<Library />} />
       <Route path="/search" element={<Search />} />
       <Route path="/upload" element={<Upload />} />

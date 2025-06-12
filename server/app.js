@@ -23,6 +23,7 @@ app.use('/playlist-songs', playlistSongesRoutes);
 app.use('/comments', commentRoutes);
 app.use('/likes-loves', likesLovesRoutes);
 
+//for testing 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
