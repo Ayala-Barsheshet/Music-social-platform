@@ -1,34 +1,60 @@
 import db from '../DB/mysql.js';
+import bcrypt from 'bcrypt';
+import {hashPassword} from '../auth/auth.js';
+
 
 export const serviceGetUserByUsername = async (username, password) => {
     try {
-        const userQuery = 'SELECT * FROM users WHERE username = ?';
+
+        const userQuery = `
+            SELECT users.*, passwords.hash 
+            FROM users 
+            JOIN passwords ON users.id = passwords.user_id 
+            WHERE users.username = ?`;
+
         const [users] = await db.promise().query(userQuery, [username]);
+
+        if (!users.length) {
+            throw new Error('Invalid username or password');
+        }
+
         const user = users[0];
-        const passwordQuery = 'SELECT hash FROM passwords WHERE user_id = ?';
-        const [results] = await db.promise().query(passwordQuery, [user.id]);
-        const actualPassword = results[0]?.password ;
-        // || results[0]?.hash; // Handle both 'password' and 'hash' fields
-        if (actualPassword !== password || !users.length)
-            throw new Error('Invalid Password or username');
+        const actualPassword = user.hash;
+
+        console.log(`Comparing user.hash from db: ${user.hash}  with Password: ${password}`)
+
+        const isMatch = await bcrypt.compare(password, actualPassword);
+
+        console.log(`Password match result: ${isMatch}`);
+
+        if (!isMatch) {
+            throw new Error('Invalid username or password');
+        }
+
         return user;
     } catch (error) {
         throw error;
     }
 };
 
-export const serviceAddUser = async (username, password) => {
+export const serviceAddUser = async (username, password, email) => {
     try {
         const userQuery = 'SELECT * FROM users WHERE username = ?';
         const [users] = await db.promise().query(userQuery, [username]);
-        if (users.length)
-            throw new Error('User already exists Please Login');
-        const usernameQuery = ` INSERT INTO users (username) VALUES (?)`;
-        const [newUser] = await db.promise().query(usernameQuery, [username]);
-        const websiteQuery = ` INSERT INTO passwords (user_id, hash) VALUES (?,?)`;
-        await db.promise().query(websiteQuery, [newUser.insertId, password]);
-        const user = await serviceGetUserByUsername(username, password);
-        return user;
+
+        if (users.length) {
+            throw new Error('User already exists. Please login.');
+        }
+
+        const insertUserQuery = 'INSERT INTO users (username, email) VALUES (?, ?)';
+        const [newUser] = await db.promise().query(insertUserQuery, [username, email]);
+
+        const hashedPassword = await hashPassword(password);
+
+        const insertPasswordQuery = 'INSERT INTO passwords (user_id, hash) VALUES (?, ?)';
+        await db.promise().query(insertPasswordQuery, [newUser.insertId, hashedPassword]);
+
+        return { id: newUser.insertId, username };
     } catch (error) {
         throw error;
     }

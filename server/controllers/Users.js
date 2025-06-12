@@ -1,18 +1,31 @@
+import {createToken} from '../auth/auth.js';
 import {
     serviceGetUserByUsername,
     serviceAddUser,
     serviceUpdateUser
 } from '../service/Users.js';
 
-
 export const getUserByUsername = async (req, res) => {
     try {
         const { username, password } = req.query;
-        const user = await serviceGetUserByUsername(username, password);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
         }
-        res.status(200).json(user);
+
+        const user = await serviceGetUserByUsername(username, password);
+
+        if (!user)
+            return res.status(404).json({ error: 'User not found' });
+
+        const token = createToken(user);
+
+        res.status(200).json({
+            message: "Login successful",
+            token,
+            user
+        });
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -20,28 +33,27 @@ export const getUserByUsername = async (req, res) => {
 
 export const addUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const newUser = await serviceAddUser(username, password);
-        const token = jwt.sign(
-            {
-                id: newUser._id,
-                accessType: "user"
-            },
-            process.env.JWT_SECRET
-        );
+        const { username, email, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Username and password are required' });
+        }
+
+        const newUser = await serviceAddUser(username, password, email);
+
+        const token = createToken(newUser);
+
         res.status(201).json({
-            message: "user created successfully",
-            token: token,
-            user: {
-                id: user._id,
-                name: user.name,
-                accessType: user.accessType
-            }
+            message: "User created successfully",
+            token,
+            user: newUser
         });
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 export const updateUser = async (req, res) => {
     try {
