@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useUser } from '../UserProvider';
+import { useUser } from '../Auth/UserProvider';
 import axios from 'axios';
 
 export function Register() {
@@ -31,7 +31,7 @@ export function Register() {
     }
     try {
       const response = await axios.post(`http://localhost:3000/users`, {
-        username: formData.username, website: formData.website,
+        username: formData.username, password: formData.website,
       });
       const user = response.data;
       setUser(user);
@@ -151,3 +151,5 @@ export function Register() {
     </div>
   );
 }
+
+export default Login;

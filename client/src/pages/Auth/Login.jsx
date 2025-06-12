@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useUser } from '../UserProvider';
+import { useUser } from '../Auth/UserProvider';
 import axios from 'axios';
 
 export function Login() {
@@ -14,7 +14,7 @@ export function Login() {
     e.preventDefault();
     try {
       const response = await axios.get(`http://localhost:3000/users/?username=${username}`, {
-        params: { website: password }
+        params: { password: password }
       })
       const user = response.data;
       setUser(user);
@@ -56,3 +56,5 @@ export function Login() {
     </div>
   );
 }
+
+export default Login;
