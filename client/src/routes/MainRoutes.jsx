@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 // import Login  from "../pages/Auth/Login";
 import Home from "../pages/Home";
-import Library from "../pages/Library";
+import Library from "../pages/personalArea";
 import Search from "../pages/Search";
 import Upload from "../pages/Upload";
 import Settings from "../pages/Settings";// Assuming you have a Song component for displaying individual songs

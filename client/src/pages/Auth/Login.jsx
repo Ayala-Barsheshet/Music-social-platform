@@ -1,7 +1,9 @@
-// import { useState } from 'react';
-// import { useNavigate, Link } from 'react-router-dom';
-// import { useUser } from '../Auth/UserProvider';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useUser } from '../../services/UserProvider';
+import APIRequests from '../../services/APIRequests';
 // import axios from 'axios';
+// import "../Auth/Login.css"
 
 // export function Login() {
 //   const [username, setUsername] = useState('');
@@ -10,20 +12,20 @@
 //   const { setUser } = useUser();
 //   const navigate = useNavigate();
 
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const response = await axios.get(`http://localhost:3000/users/?username=${username}`, {
-//         params: { password: password }
-//       })
-//       const user = response.data;
-//       setUser(user);
-//       localStorage.setItem('currentUser', JSON.stringify(user));
-//       navigate(`/home`);
-//     } catch (error) {
-//       setError(error.response?.data?.error); 
-//     }
-//   };
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await APIRequests.getRequest(`users?username=${username}&password=${password}`)
+      const user = response.username;
+      const token = response.token; 
+      setUser(user);
+      localStorage.setItem('token', JSON.stringify(token));//for server
+      localStorage.setItem('currentUser', JSON.stringify(user));//for UI porpose the username
+      navigate(`/home`);
+    } catch (error) {
+      setError(error.response?.data?.error);
+    }
+  };
 
 //   return (
 //     <div>
