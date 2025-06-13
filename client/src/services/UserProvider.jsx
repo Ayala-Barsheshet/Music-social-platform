@@ -17,10 +17,10 @@ export function UserProvider({ children }) {
     }
   }, []);
 
-  const [user, setUser] = useState(-1);
+  const [user, setUser] = useState(null);
 
   const logout = () => {
-    setUser(-1);
+    setUser(null);
     localStorage.removeItem('currentUser');
   };
 

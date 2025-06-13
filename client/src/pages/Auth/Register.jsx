@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useUser } from '../Auth/UserProvider';
+import { useUser } from '../../services/UserProvider';
 import axios from 'axios';
 
 export function Register() {
@@ -152,4 +152,4 @@ export function Register() {
   );
 }
 
-export default Login;
+export default Register;

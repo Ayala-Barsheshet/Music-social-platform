@@ -22,8 +22,8 @@ export const getUserByUsername = async (req, res) => {
 
         res.status(200).json({
             message: "Login successful",
-            token,
-            user
+            token:token,
+            username: user.username
         });
 
     } catch (error) {
@@ -45,8 +45,8 @@ export const addUser = async (req, res) => {
 
         res.status(201).json({
             message: "User created successfully",
-            token,
-            user: newUser
+            token: token,
+            username: newUser.username
         });
 
     } catch (error) {

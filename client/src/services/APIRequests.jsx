@@ -1,19 +1,16 @@
 import { Component } from 'react';
 
 const SERVER_URL = 'http://localhost:3000/';
-const token = localStorage.getItem("token");
 
 class APIRequests extends Component {
 
     static async getRequest(restUrl) {
         try {
             console.log(`Making GET request to: ${SERVER_URL}${restUrl}`);
-            
+
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: this.buildHeaders(false)
             });
 
             if (!response.ok) {
@@ -34,7 +31,7 @@ class APIRequests extends Component {
         try {
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                headers: this.buildHeaders(),
                 body: JSON.stringify(objectToAdd),
             })
 
@@ -56,7 +53,7 @@ class APIRequests extends Component {
         try {
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                headers: this.buildHeaders(),
                 body: JSON.stringify(fieldsToUpdate),
             })
 
@@ -78,9 +75,7 @@ class APIRequests extends Component {
         try {
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: this.buildHeaders(false)
             })
 
             if (!response.ok) {
@@ -93,6 +88,23 @@ class APIRequests extends Component {
         }
 
     }
+
+    static async buildHeaders(contentType = true) {
+        const token = localStorage.getItem("token");
+        const headers = {};
+
+        if (contentType) {
+            headers['Content-Type'] = 'application/json';
+        }
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        return headers;
+    }
 }
+
+
 
 export default APIRequests;
