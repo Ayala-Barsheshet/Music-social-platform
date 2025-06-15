@@ -9,7 +9,7 @@ export const UserGuard = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    const currentUserId = user.id;
+     const currentUserId = user.id;
 
     if (parseInt(userId) !== currentUserId) {
       const newPath = location.pathname.replace(`/users/${userId}`, `/users/${currentUserId}`);

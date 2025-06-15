@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
+
   const navigate = useNavigate()
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+    const storedUser = JSON.parse(sessionStorage.getItem('currentUser'));
     if (storedUser) {
       setUser(storedUser);
     }
@@ -21,7 +22,7 @@ export function UserProvider({ children }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
   };
 
   return (

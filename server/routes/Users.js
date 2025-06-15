@@ -1,15 +1,14 @@
 import express from 'express';
-import auth from '../auth/authMiddleware.js';
 import {
-  getUserByUsername,
-  addUser,
+  loginUser,
+  registerUser,
   updateUser
 } from '../controllers/Users.js';
 
 const router = express.Router();
 
-router.get('/', getUserByUsername);
-router.post('/', addUser);
+router.post('/login', loginUser);
+router.post('/register', registerUser);
 router.patch('/', updateUser);
 
 export default router;

@@ -1,9 +1,9 @@
 import db from '../DB/mysql.js';
 import bcrypt from 'bcrypt';
-import {hashPassword} from '../auth/auth.js';
+import { hashPassword } from '../auth/auth.js';
 
 
-export const serviceGetUserByUsername = async (username, password) => {
+export const serviceLoginUser = async (username, password) => {
     try {
 
         const userQuery = `
@@ -37,16 +37,16 @@ export const serviceGetUserByUsername = async (username, password) => {
     }
 };
 
-export const serviceAddUser = async (username, password, email) => {
+export const serviceRegisterUser = async (username, password, email) => {
     try {
         const userQuery = 'SELECT * FROM users WHERE username = ?';
         const [users] = await db.promise().query(userQuery, [username]);
 
         if (users.length) {
-            throw new Error('User already exists. Please login.');
+            throw new Error('Registration could not be completed. Please try a different username or email');
         }
 
-        const insertUserQuery = 'INSERT INTO users (username, email) VALUES (?, ?)';
+        const insertUserQuery = 'INSERT INTO users (username, email, access_type, created_at) VALUES (?, ?, "user", NOW())';
         const [newUser] = await db.promise().query(insertUserQuery, [username, email]);
 
         const hashedPassword = await hashPassword(password);
@@ -54,7 +54,12 @@ export const serviceAddUser = async (username, password, email) => {
         const insertPasswordQuery = 'INSERT INTO passwords (user_id, hash) VALUES (?, ?)';
         await db.promise().query(insertPasswordQuery, [newUser.insertId, hashedPassword]);
 
-        return { id: newUser.insertId, username };
+        return {
+            id: newUser.insertId,
+            username,
+            access_type: 'user',
+        };
+
     } catch (error) {
         throw error;
     }

@@ -29,22 +29,24 @@ class APIRequests extends Component {
 
     static async postRequest(restUrl, objectToAdd) {
         try {
+            console.log(`Making POST request to: ${SERVER_URL}${restUrl}`);
+
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'POST',
                 headers: this.buildHeaders(),
                 body: JSON.stringify(objectToAdd),
             })
 
-            if (!response.ok) {
-                throw new Error(`POST HTTP error! status: ${response.status}`);
-            }
-
             const data = await response.json();
+
+               if (!response.ok) {
+                const errorMessage = data?.error || 'An error occurred' ;
+                throw new Error(errorMessage);
+            }
             return data;
 
         } catch (error) {
-            console.error('An error occurred:', error);
-            return [];
+            throw error; // throw the error to the client
         }
 
     }
@@ -76,7 +78,7 @@ class APIRequests extends Component {
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'DELETE',
                 headers: this.buildHeaders(false)
-            })
+            });
 
             if (!response.ok) {
                 throw new Error(`DELETE HTTP error! status: ${response.status}`);
@@ -89,8 +91,8 @@ class APIRequests extends Component {
 
     }
 
-    static async buildHeaders(contentType = true) {
-        const token = localStorage.getItem("token");
+    static buildHeaders(contentType = true) {
+        const token = sessionStorage.getItem("token");
         const headers = {};
 
         if (contentType) {

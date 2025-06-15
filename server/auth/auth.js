@@ -12,8 +12,8 @@ export const createToken = (user) => {
       id: user.id,
       accessType: user.accessType || "user"
     },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
+    process.env.JWT_SECRET
+    //, { expiresIn: '1h' }
   );
 };
 

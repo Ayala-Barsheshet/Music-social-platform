@@ -15,15 +15,16 @@ export function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await APIRequests.getRequest(users?username=${username}&password=${password})
-      const user = response.username;
+      const response = await APIRequests.postRequest(`users/login`, { username:username, password:password });
+      const user = response.user;
       const token = response.token; 
       setUser(user);
-      localStorage.setItem('token', JSON.stringify(token));//for server
-      localStorage.setItem('currentUser', JSON.stringify(user));//for UI porpose the username
+      sessionStorage.setItem('token', JSON.stringify(token));//for server
+      sessionStorage.setItem('currentUser', JSON.stringify(user));//for UI purpose - the username
       navigate(`/home`);
     } catch (error) {
-      setError(error.response?.data?.error);
+      console.log('Login error:', error);
+      setError(error.message || 'An error occurred during login');
     }
   };
 
