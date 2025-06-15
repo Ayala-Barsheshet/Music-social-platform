@@ -1,6 +1,32 @@
-/* בדיקה: זהו קובץ CSS לדוגמה */
-.test-message {
-    color: blue;
-    font-size: 20px;
-    text-align: center;
+.comments-container {
+  padding: 1rem;
+  border-top: 2px solid #ccc;
+}
+
+.comment-card {
+  border: 1px solid #ddd;
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: #f9f9f9;
+}
+
+.comment-header {
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+}
+
+.comment-actions {
+  margin-top: 0.5rem;
+}
+
+.comment-actions button {
+  margin-right: 0.5rem;
+}
+
+.comment-edit-form input,
+.comment-edit-form textarea {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
 }

@@ -12,6 +12,7 @@ class APIRequests extends Component {
                 method: 'GET',
                 headers: this.buildHeaders(false)
             });
+            console.log(`Response status: ${response}`); // Debugging line
 
             if (!response.ok) {
                 throw new Error(`GET HTTP error! status: ${response.status}`);
@@ -21,8 +22,7 @@ class APIRequests extends Component {
             return data;
 
         } catch (error) {
-            console.error('An error occurred:', error);
-            return [];
+          throw error; // throw the error to the client
         }
 
     }

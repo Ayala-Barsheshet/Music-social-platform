@@ -5,6 +5,7 @@ import { hashPassword } from '../auth/auth.js';
 
 export const serviceLoginUser = async (username, password) => {
     try {
+console.log(`Attempting to log in user: ${username}`, password ? 'with password provided' : 'without password');
 
         const userQuery = `
             SELECT users.*, passwords.hash 

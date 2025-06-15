@@ -19,7 +19,7 @@ export function Login() {
       const user = response.user;
       const token = response.token; 
       setUser(user);
-      sessionStorage.setItem('token', JSON.stringify(token));//for server
+      sessionStorage.setItem('token',token);//for server
       sessionStorage.setItem('currentUser', JSON.stringify(user));//for UI purpose - the username
       navigate(`/home`);
     } catch (error) {

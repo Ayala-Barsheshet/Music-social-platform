@@ -21,11 +21,10 @@ const SongSearchPage = () => {
     };
 
     useEffect(() => {
-        sessionStorage.setItem(
-            "token",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibXl2dXNlciIsImFjY2Vzc1R5cGUiOiJhZG1pbiJ9.d-zDT3JPsYovlJbmTrIdnVHZCzIocva9mM_e8d3349k"
-        );
+    
         APIRequests.getRequest("songs").then(setSongs);
+        console.log("Fetching songs from API...");
+        
     }, []);
 
     useEffect(() => {

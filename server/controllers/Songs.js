@@ -8,6 +8,11 @@ import {
 
 export const getAllSongs = async (req, res) => {
     try {
+        console.log('Fetching all songs...');
+        console.log(`User ID: ${req.user.id}`);  // Log the user ID for debugging
+        console.log(`User Access Type: ${req.user.accessType}`);  // Log the access type for debugging  
+        
+        
         const accessType = req.user.accessType;  //access type from the request, got it from the token
         console.log(`Access type: ${accessType}`);
         const Songs = await serviceGetAllSongs(accessType);
