@@ -4,13 +4,15 @@ export const serviceGetUserPlaylists = async (userId) => {
   const [rows] = await db.promise().query(
     `SELECT * FROM playlists WHERE user_id = ?`, [userId]
   );
+  console.log("////////////s",rows);
+  
   return rows;
 };
 
-export const serviceAddPlaylist = async (name, bio, userId) => {
+export const serviceAddPlaylist = async (name, description, userId) => {
   const [result] = await db.promise().query(
-    `INSERT INTO playlists (name, bio, user_id) VALUES (?, ?, ?)`,
-    [name, bio, userId]
+    `INSERT INTO playlists (name, description, user_id) VALUES (?, ?, ?)`,
+    [name, description, userId]
   );
   const [playlist] = await db.promise().query(
     `SELECT * FROM playlists WHERE id = ?`, [result.insertId]
@@ -18,15 +20,15 @@ export const serviceAddPlaylist = async (name, bio, userId) => {
   return playlist[0];
 };
 
-export const serviceUpdatePlaylist = async (id, name, bio, userId) => {
+export const serviceUpdatePlaylist = async (id, name, description, userId) => {
   const [check] = await db.promise().query(
     `SELECT * FROM playlists WHERE id = ? AND user_id = ?`, [id, userId]
   );
   if (!check.length) throw new Error('Unauthorized or playlist not found');
 
   await db.promise().query(
-    `UPDATE playlists SET name = ?, bio = ? WHERE id = ?`,
-    [name, bio, id]
+    `UPDATE playlists SET name = ?, description = ? WHERE id = ?`,
+    [name, description, id]
   );
   const [updated] = await db.promise().query(`SELECT * FROM playlists WHERE id = ?`, [id]);
   return updated[0];

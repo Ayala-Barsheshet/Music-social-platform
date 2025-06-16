@@ -28,7 +28,7 @@ export const getCommentsBySongId = async (req, res) => {
 
 export const addComment = async (req, res) => {
     try {     
-        const user_id = req.user.userId;
+        const user_id = req.user.id;
         const { song_id, title, body } = req.body;
         const newComment = await serviceAddComment(song_id, user_id, title, body);
         res.status(201).json(newComment);
@@ -39,7 +39,7 @@ export const addComment = async (req, res) => {
 
 export const updateComment = async (req, res) => {
     try {
-        const user_id = req.user.userId;
+        const user_id = req.user.id;
         const { id } = req.params;
         const fields = req.body;
         const updated = await serviceUpdateComment(id, user_id, fields);
@@ -51,7 +51,7 @@ export const updateComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
     try {
-        const user_id = req.user.userId;
+        const user_id = req.user.id;
         const { id } = req.params;
         await serviceDeleteComment(id, user_id);
         res.status(204).send();

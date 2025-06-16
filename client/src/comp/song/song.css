@@ -102,3 +102,10 @@ audio {
   line-height: 1.6;
   direction: rtl;
 }
+.my-video {
+
+  width: 400px;
+  height: 400px; /* או height: 300px אם את רוצה גובה קבוע */
+  border-radius: 12px; /* אם בא לך עיצוב עגול */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* הצללה */
+}

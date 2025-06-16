@@ -10,8 +10,8 @@ const router = express.Router();
 
 router.use(auth);
 
-router.get('/', getSongsByPlaylistId);
-router.post('/', addSongToPlaylist);
-router.delete('/', removeSongFromPlaylist);
+router.get('/:playlistId', getSongsByPlaylistId);
+router.post('/:playlistId/songs/:songId', addSongToPlaylist);
+router.delete('/:playlistId/songs/:songId', removeSongFromPlaylist);
 
 export default router;

@@ -1,0 +1,72 @@
+.container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.playlistList {
+  margin-top: 20px;
+}
+
+.playlistRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.playlistName {
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.smallBtn {
+  font-size: 12px;
+  padding: 5px 8px;
+  background-color: #1db954;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.smallBtn:hover {
+  background-color: #159c44;
+}
+
+.addBtn {
+  margin-top: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #1db954;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.addForm input {
+  display: block;
+  margin: 5px 0;
+  padding: 6px;
+  width: 100%;
+  max-width: 300px;
+}

@@ -1,0 +1,56 @@
+.container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.songList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.songRow {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+
+.songRow:hover {
+  background-color: #eee;
+}
+
+.songInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.songName {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.songArtist {
+  font-size: 14px;
+  color: #666;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  margin-top: 20px;
+}
+
+.errorMessage {
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+}

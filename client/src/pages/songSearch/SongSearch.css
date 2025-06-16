@@ -121,3 +121,97 @@
   gap: 12px;
   padding-bottom: 8px;
 } 
+.add-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.song-card {
+  position: relative;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+}
+
+.add-button {
+  background: none;
+  border: none;
+  color: #2ecc71; /* ירוק בהיר */
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.add-button:hover {
+  color: #27ae60; /* ירוק כהה יותר ב-hover */
+}
+
+.add-button:focus {
+  outline: none;
+}
+
+.add-button.added {
+  color: #2ecc71;
+  font-size: 18px;
+  cursor: default;
+}
+.add-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem; /* גודל קטן ועדין */
+  color: #2ecc71; /* ירוק בהיר */
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: color 0.2s ease;
+}
+
+.add-button:hover {
+  color: #27ae60; /* ירוק טיפה כהה יותר בלחיצה */
+}
+
+.add-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.add-button:active {
+  transform: scale(0.95); /* אנימציה קטנה */
+}
+
+.add-button.added {
+  color: #2ecc71;
+  cursor: default;
+}
+
+.song-search-page {
+  position: relative;
+}
+
+.back-to-playlist-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #2ecc71;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 8px;
+}
+
+.back-to-playlist-button:hover {
+  color: #27ae60;
+}

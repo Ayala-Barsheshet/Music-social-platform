@@ -33,9 +33,12 @@ export function Register() {
       });
       const user = response.user;
       const token = response.token;
-      setUser(user);
-      sessionStorage.setItem('token', JSON.stringify(token));//for server
+      console.log('user from register:', user);
+
       sessionStorage.setItem('currentUser', JSON.stringify(user));//for UI purpose
+
+      sessionStorage.setItem('token', token);//for server
+      setUser(user);
       navigate('/home');
     } catch (error) {
       setError(error.message || 'An error occurred during registration');

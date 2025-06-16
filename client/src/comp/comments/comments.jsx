@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import APIRequests from '../../services/APIRequests.jsx';
-import './Comments.css';
+import { useUser } from '../../services/UserProvider';
+import styles from './Comments.module.css';
 
 const Comments = ({ songId }) => {
   const [comments, setComments] = useState([]);
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editFields, setEditFields] = useState({ title: '', body: '' });
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  const token = localStorage.getItem("token");
+  const [newCommentFields, setNewCommentFields] = useState({ title: '', body: '' });
+  const [isAddingComment, setIsAddingComment] = useState(false);
+
+  const { user } = useUser();
 
   useEffect(() => {
     fetchComments();
@@ -16,9 +19,7 @@ const Comments = ({ songId }) => {
   const fetchComments = async () => {
     try {
       const res = await APIRequests.getRequest(`comments/song/${songId}`);
-
       setComments(res);
-
     } catch (err) {
       console.error('Error loading comments:', err);
     }
@@ -27,10 +28,10 @@ const Comments = ({ songId }) => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this comment?")) return;
     try {
-      await APIRequests.deleteRequest(`comments/${id}`, token);
+      await APIRequests.deleteRequest(`comments/${id}`);
       fetchComments();
     } catch (err) {
-      alert("Unauthorized or error deleting comment.");
+      console.error("Error deleting comment:", err);
     }
   };
 
@@ -41,24 +42,65 @@ const Comments = ({ songId }) => {
 
   const handleUpdate = async (id) => {
     try {
-      await APIRequests.patchRequest(`comments/${id}`, editFields, token);
+      await APIRequests.patchRequest(`comments/${id}`, editFields);
       setEditingCommentId(null);
       fetchComments();
     } catch (err) {
-      alert("Update failed. You might not have permission.");
+      console.error("Error updating comment:", err);
+    }
+  };
+
+  const handleAddComment = async () => {
+    if (!newCommentFields.title || !newCommentFields.body) return;
+
+    const newComment = {
+      title: newCommentFields.title,
+      body: newCommentFields.body,
+      song_id: songId,
+    };
+
+    try {
+      await APIRequests.postRequest('comments', newComment);
+      setNewCommentFields({ title: '', body: '' });
+      setIsAddingComment(false);
+      fetchComments();
+    } catch (err) {
+      console.error("Error submitting comment:", err);
     }
   };
 
   return (
-    <div className="comments-container">
-      <h2>תגובות</h2>
+    <div className={styles.commentsContainer}>
+      <h2>Comments</h2>
+
+      {!isAddingComment ? (
+        <button className={styles.newCommentBtn} onClick={() => setIsAddingComment(true)}>
+          ➕ New Comment
+        </button>
+      ) : (
+        <div className={styles.newCommentForm}>
+          <input
+            type="text"
+            value={newCommentFields.title}
+            onChange={(e) => setNewCommentFields({ ...newCommentFields, title: e.target.value })}
+            placeholder="Title"
+          />
+          <textarea
+            value={newCommentFields.body}
+            onChange={(e) => setNewCommentFields({ ...newCommentFields, body: e.target.value })}
+            placeholder="Body"
+          />
+          <button onClick={handleAddComment}>Submit Comment</button>
+        </div>
+      )}
+
       {comments.map((c) => (
-        <div key={c.id} className="comment-card">
-          <div className="comment-header">
+        <div key={c.id} className={styles.commentCard}>
+          <div className={styles.commentHeader}>
             <strong>{c.username}</strong> ({c.email})
           </div>
           {editingCommentId === c.id ? (
-            <div className="comment-edit-form">
+            <div className={styles.commentEditForm}>
               <input
                 type="text"
                 value={editFields.title}
@@ -70,17 +112,17 @@ const Comments = ({ songId }) => {
                 onChange={(e) => setEditFields({ ...editFields, body: e.target.value })}
                 placeholder="Body"
               />
-              <button onClick={() => handleUpdate(c.id)}>שמירה</button>
-              <button onClick={() => setEditingCommentId(null)}>ביטול</button>
+              <button onClick={() => handleUpdate(c.id)}>Save</button>
+              <button onClick={() => setEditingCommentId(null)}>Cancel</button>
             </div>
           ) : (
             <>
               <h4>{c.title}</h4>
               <p>{c.body}</p>
-              {currentUser?.id === c.user_id && (
-                <div className="comment-actions">
-                  <button onClick={() => handleEdit(c)}>✏️ ערוך</button>
-                  <button onClick={() => handleDelete(c.id)}>🗑️ מחק</button>
+              {user?.id === c.user_id && (
+                <div className={styles.commentActions}>
+                  <button onClick={() => handleEdit(c)}>✏️ Edit</button>
+                  <button onClick={() => handleDelete(c.id)}>🗑️ Delete</button>
                 </div>
               )}
             </>
@@ -92,3 +134,4 @@ const Comments = ({ songId }) => {
 };
 
 export default Comments;
+
