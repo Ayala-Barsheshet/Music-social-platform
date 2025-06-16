@@ -3,13 +3,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import APIRequests from "../services/APIRequests";
+import { useUser } from '../services/UserProvider';
+
 // import "./SongSearch.css";
 
 const Home = () => {
+  
   const [recommendedSongs, setRecommendedSongs] = useState([]);
   const [recentSongs, setRecentSongs] = useState([]);
   const [recommendedOffset, setRecommendedOffset] = useState(0);
   const [recentOffset, setRecentOffset] = useState(0);
+    const { user } = useUser();
+
   const navigate = useNavigate();
   const LIMIT = 5;
 
@@ -49,18 +54,18 @@ const Home = () => {
 
   return (
     <div className="song-search-page">
-      <h1 className="home-title">ברוך הבא ל-MySpotify!</h1>
+      <h1 className="home-title">Welcome {user.username} to spotify & share </h1>
 
       <div className="songs-by-album">
-        <h2 className="album-title">🎧 שירים מומלצים</h2>
+        <h2 className="album-title">🎧Most loved songs on Spotify</h2>
         {renderSongs(recommendedSongs)}
-        <button className="load-more-btn" onClick={loadMoreRecommended}>טען עוד מומלצים</button>
+        <button className="load-more-btn" onClick={loadMoreRecommended}>load more... </button>
       </div>
 
       <div className="songs-by-album">
-        <h2 className="album-title">🕒 שירים שהועלו לאחרונה</h2>
+        <h2 className="album-title">🕒Recently uploaded songs</h2>
         {renderSongs(recentSongs)}
-        <button className="load-more-btn" onClick={loadMoreRecent}>טען עוד אחרונים</button>
+        <button className="load-more-btn" onClick={loadMoreRecent}>load more...</button>
       </div>
     </div>
   );
