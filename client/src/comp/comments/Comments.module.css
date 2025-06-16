@@ -1,9 +1,9 @@
-.comments-container {
+.commentsContainer {
   padding: 1rem;
   border-top: 2px solid #ccc;
 }
 
-.comment-card {
+.commentCard {
   border: 1px solid #ddd;
   padding: 0.8rem;
   border-radius: 8px;
@@ -11,21 +11,32 @@
   background: #f9f9f9;
 }
 
-.comment-header {
+.commentHeader {
   font-weight: bold;
   margin-bottom: 0.4rem;
 }
 
-.comment-actions {
+.commentActions {
   margin-top: 0.5rem;
 }
 
-.comment-actions button {
+.commentActions button {
   margin-right: 0.5rem;
 }
 
-.comment-edit-form input,
-.comment-edit-form textarea {
+.commentEditForm input,
+.commentEditForm textarea {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+.newCommentBtn {
+  margin-bottom: 1rem;
+}
+
+.newCommentForm input,
+.newCommentForm textarea {
   width: 100%;
   margin-bottom: 0.5rem;
   padding: 0.5rem;

@@ -12,7 +12,8 @@ class APIRequests extends Component {
                 method: 'GET',
                 headers: this.buildHeaders(false)
             });
-            console.log(`Response status: ${response}`); // Debugging line
+            console.log(`Response status: ${response.status}`);
+            
 
             if (!response.ok) {
                 throw new Error(`GET HTTP error! status: ${response.status}`);
@@ -75,6 +76,8 @@ class APIRequests extends Component {
 
     static async deleteRequest(restUrl) {
         try {
+            console.log(`Making DELETE request to: ${SERVER_URL}${restUrl}`);
+            
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'DELETE',
                 headers: this.buildHeaders(false)

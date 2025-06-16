@@ -18,9 +18,10 @@ export function Login() {
       const response = await APIRequests.postRequest(`users/login`, { username:username, password:password });
       const user = response.user;
       const token = response.token; 
-      setUser(user);
+     
       sessionStorage.setItem('token',token);//for server
       sessionStorage.setItem('currentUser', JSON.stringify(user));//for UI purpose - the username
+      setUser(user);
       navigate(`/home`);
     } catch (error) {
       console.log('Login error:', error);

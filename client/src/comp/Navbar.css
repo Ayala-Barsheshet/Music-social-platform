@@ -28,3 +28,16 @@
   font-weight: bold;
   color: #1db954;
 }
+
+.logout-button {
+  background: none;
+  border: none;
+  color: rgb(211, 16, 16);
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.logout-button:hover {
+  color: #ff6666;
+}

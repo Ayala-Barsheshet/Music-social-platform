@@ -28,8 +28,8 @@ export const serviceGetSongById = async (id, accessType) => {
 };
 
 export const serviceAddSong = async (album_id, name, lyrics, artist_name, genre, file_path, accessType) => {
-    try {        
-       let approved = 0; // Default to not approved
+    try {
+        let approved = 0; // Default to not approved
         if (accessType === 'admin') {// If the user is an admin, set approved to 1
             approved = 1;
         }
@@ -98,4 +98,34 @@ const checkArtistPermissions = async (songId, token, fieldsToUpdate) => {
             throw new Error('Artist cannot update approval status');
         }
     }
+};
+
+
+
+export const serviceGetRecommendedSongs = async (limit = 5, offset = 0) => {
+    const query = `
+SELECT 
+  songs.*, 
+  COUNT(CASE WHEN likes.liked = 1 THEN 1 END) AS likes_count
+FROM songs
+LEFT JOIN likes ON songs.id = likes.song_id
+WHERE songs.approved = 1
+GROUP BY songs.id
+ORDER BY likes_count DESC
+LIMIT ? OFFSET ?
+
+    `;
+    const [results] = await db.promise().query(query, [limit, offset]);
+    return results;
+};
+
+export const serviceGetRecentSongs = async (limit = 5, offset = 0) => {
+    const query = `
+        SELECT * FROM songs
+        WHERE approved = 1
+        ORDER BY created_at DESC
+        LIMIT ? OFFSET ?
+    `;
+    const [results] = await db.promise().query(query, [limit, offset]);
+    return results;
 };
