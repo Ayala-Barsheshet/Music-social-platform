@@ -1,0 +1,63 @@
+.settings {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 128, 128, 0.2);
+  font-family: "Segoe UI", sans-serif;
+  direction: rtl;
+}
+
+.settings h2 {
+  text-align: center;
+  color: #008080;
+  margin-bottom: 1.5rem;
+}
+
+.settings h3 {
+  color: #00796b;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.settings input {
+  display: block;
+  width: 100%;
+  padding: 0.7rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.settings input:focus {
+  border-color: #009688;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 150, 136, 0.2);
+}
+
+.settings button {
+  background: #009688;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1.5rem;
+}
+
+.settings button:hover {
+  background: #00796b;
+}
+
+.settings p {
+  text-align: center;
+  color: #333;
+  margin-top: 1rem;
+  font-weight: bold;
+}

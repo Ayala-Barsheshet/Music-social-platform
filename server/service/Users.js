@@ -66,15 +66,55 @@ export const serviceRegisterUser = async (username, password, email) => {
     }
 };
 
-export const serviceUpdateUser = async (userData) => {
-    try {
-        const { email, phone, name, username } = userData;
-        const query = ` UPDATE users SET email = ?, phone = ?, name = ? WHERE username = ? `;
-        await db.promise().query(query, [email, phone, name, username]);
-        const [user] = await db.promise().query(`SELECT * FROM users WHERE username = ?`, [username]);
-        return user[0];
-    } catch (error) {
-        throw error;
-    }
-};
+// export const serviceUpdateUser = async (userData) => {
+//     try {
+//         const { email, phone, name, username } = userData;
+//         const query = ` UPDATE users SET email = ?, phone = ?, name = ? WHERE username = ? `;
+//         await db.promise().query(query, [email, phone, name, username]);
+//         const [user] = await db.promise().query(`SELECT * FROM users WHERE username = ?`, [username]);
+//         return user[0];
+//     } catch (error) {
+//         throw error;
+//     }
+// };
 
+export const serviceUpdateUser = async ({ email, phone, name, currentPassword, newPassword ,user_id}) => {
+  try {
+    console.log("bnbvbgnhhbgfvbnmnbvbnmnbvcxvbcvbnbvcx");
+    // ���������� �������� �������������� ���� ����
+    console.log(`Updating user with ID: ${user_id}`);
+    
+    const fields = [];
+    const vals = [];
+    if (email) { fields.push("email = ?"); vals.push(email); }
+    if (phone) { fields.push("phone = ?"); vals.push(phone); }
+    if (name) { fields.push("name = ?"); vals.push(name); }
+
+    if (fields.length) {
+      vals.push(user_id);
+      await db.promise().query(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`, vals);
+    }
+
+    // שינוי סיסמה אם יש
+    if (currentPassword && newPassword) {
+      const [[user]] = await db.promise().query(`
+        SELECT u.id, p.hash 
+        FROM users u JOIN passwords p ON u.id = p.user_id 
+        WHERE u.id = ?`, [user_id]);
+      if (!user) throw new Error("User not found");
+      if (!await bcrypt.compare(currentPassword, user.hash)) throw new Error("Current password is incorrect");
+
+      const hashedNewPassword = await hashPassword(newPassword);
+      await db.promise().query(`UPDATE passwords SET hash = ? WHERE user_id = ?`, [hashedNewPassword, user.id]);
+    }
+
+    // ���������� ������������ ��������������
+    const [[updatedUser]] = await db.promise().query(`SELECT * FROM users WHERE id = ?`, [user_id]);
+    console.log("Updated user:", updatedUser);
+    
+    return "updatedUser";
+
+  } catch (error) {
+    throw error;
+  }
+};

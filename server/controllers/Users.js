@@ -69,7 +69,8 @@ export const registerUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         const formData = req.body;
-        const newUser = await serviceUpdateUser(formData);
+        const userId = req.user.id; // Get the user ID from the token
+        const newUser = await serviceUpdateUser({...formData , user_id: userId});
         res.status(201).json(newUser);
     } catch (error) {
         res.status(500).json({ error: error.message });

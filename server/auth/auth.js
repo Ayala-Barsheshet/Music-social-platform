@@ -7,10 +7,12 @@ export const hashPassword = async (clientPassword) => {
 };
 
 export const createToken = (user) => {
+  console.log(`Creating token for user ID: ${user.id}, Access Type: ${user.accessType}`);
+  
   return jwt.sign(
     {
       id: user.id,
-      accessType: user.accessType || "user"
+      accessType: user.access_type || "user", // Default to "user" if accessType is not provided
     },
     process.env.JWT_SECRET
     //, { expiresIn: '1h' }

@@ -5,9 +5,10 @@ import {
   serviceDeleteAlbum
 } from '../service/Albums.js';
 
-export const getAllAlbums = async (req, res) => {
+export const getAlbumsByArtistId = async (req, res) => {
   try {
-    const albums = await serviceGetAllAlbums();
+    const  artistId  = req.user.id;
+    const albums = await serviceGetAllAlbums(artistId);
     res.status(200).json(albums);
   } catch (err) {
     res.status(500).json({ error: err.message });

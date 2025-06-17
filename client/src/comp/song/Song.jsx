@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import APIRequests from "../../services/APIRequests.jsx";
-import "./song.css";
+// import styles from "./Song.css";
 import Comments from "../comments/comments.jsx";
 
 const Song = () => {

@@ -13,7 +13,7 @@ const Navbar = () => {
         <li><NavLink to="/" end>בית</NavLink></li>
         <li><NavLink to="/my-library">ספריה שלי</NavLink></li>
         <li><NavLink to="/search">חיפוש</NavLink></li>
-        <li><NavLink to="/upload">העלאה</NavLink></li>
+        <li><NavLink to="/upload-song">העלאה</NavLink></li>
         <li><NavLink to="/settings">הגדרות</NavLink></li>
       </ul>
     </nav>

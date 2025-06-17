@@ -8,10 +8,9 @@ import Home from "../pages/Home.jsx";
 import MyLibrary from "../pages/myLibrary/MyLibrary.jsx";
 import Playlist from "../pages/playlist/Playlist.jsx";
 import SongSearch from "../pages/songSearch/SongSearch.jsx";
-import Upload from "../pages/Upload.jsx";
-import Settings from "../pages/Settings.jsx";
+import UploadSong from "../pages/Upload/UploadSong.jsx";
+import Settings from "../pages/settings/Settings.jsx";
 import Song from "../comp/song/Song.jsx"; 
-
 
 const MainRoutes = ({isAuthenticated}) => {
 
@@ -29,7 +28,7 @@ const MainRoutes = ({isAuthenticated}) => {
         <Route path="/playlists-songs/:playlistId" element={<Playlist />} />
         <Route path="/search" element={<SongSearch />} />
         <Route path="/search/add-to-playlist/:playlistId" element={<SongSearch />} />
-        <Route path="/upload" element={<Upload />} />
+        <Route path="/upload-song" element={<UploadSong />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/songs/:songId" element={<Song />} />
         <Route path="/" element={<Navigate to="/home" />} />
