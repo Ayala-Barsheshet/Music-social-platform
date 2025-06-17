@@ -11,12 +11,35 @@ const Layout = () => {
 
   const isAuthenticated = !!user
 
-  useEffect(() => {
-    if (!isAuthenticated && !location.pathname.includes("login") && !location.pathname.includes("register")) {
-      alert("Please log in - access is not allowed without authentication!");
-      navigate("/login");
-    }
-  }, [isAuthenticated, location.pathname]);
+  // useEffect(() => {
+  //   if (!isAuthenticated && !location.pathname.includes("login") && !location.pathname.includes("register")) {
+  //     alert("Please log in - access is not allowed without authentication!");
+  //     navigate("/login");
+  //   }
+  // }, [isAuthenticated, location.pathname]);
+
+//   useEffect(() => {
+//   // if (user === null) return;
+//   if (
+//     !user &&
+//     !location.pathname.includes("login") &&
+//     !location.pathname.includes("register")
+//   ) {
+//     alert("Please log in - access is not allowed without authentication!");
+//     navigate("/login");
+//   }
+// }, [user]);
+useEffect(() => {
+  if (
+    !user &&
+    !location.pathname.includes("login") &&
+    !location.pathname.includes("register")
+  ) {
+    alert("Please log in - access is not allowed without authentication!");
+    navigate("/login");
+  }
+}, [user, location.pathname]);
+
 
   return (
     <div className="app-container">

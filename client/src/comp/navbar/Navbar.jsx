@@ -5,6 +5,8 @@ import { useUser } from "../../services/UserProvider"; // התאימי את הנ
 
 const Navbar = () => {
   const { logout } = useUser();
+  const { user } = useUser();
+
   return (
     <nav className="navbar">
       <h2 className="logo">MySpotify</h2>
@@ -13,8 +15,13 @@ const Navbar = () => {
         <li><NavLink to="/" end>בית</NavLink></li>
         <li><NavLink to="/my-library">ספריה שלי</NavLink></li>
         <li><NavLink to="/search">חיפוש</NavLink></li>
-        <li><NavLink to="/upload">העלאה</NavLink></li>
         <li><NavLink to="/settings">הגדרות</NavLink></li>
+        {(user.accessType === "artist" || user.accessType === "admin") && (
+          <>
+            <li><NavLink to="/upload">העלאה</NavLink></li>
+            <li><NavLink to="/access-control">ניהול משתמשים</NavLink></li>
+          </>
+        )}
       </ul>
     </nav>
   );

@@ -10,10 +10,11 @@ import Playlist from "../pages/playlist/Playlist.jsx";
 import SongSearch from "../pages/songSearch/SongSearch.jsx";
 import Upload from "../pages/Upload.jsx";
 import Settings from "../pages/Settings.jsx";
-import Song from "../comp/song/Song.jsx"; 
+import Song from "../comp/song/Song.jsx";
+import AccessControl from "../pages/Auth/accessControl/AccessControl.jsx";
 
 
-const MainRoutes = ({isAuthenticated}) => {
+const MainRoutes = ({ isAuthenticated }) => {
 
   return (<Routes>
     {!isAuthenticated ? (
@@ -31,8 +32,8 @@ const MainRoutes = ({isAuthenticated}) => {
         <Route path="/search/add-to-playlist/:playlistId" element={<SongSearch />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/access-control" element={<AccessControl />} />
         <Route path="/songs/:songId" element={<Song />} />
-        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="*" element={<Navigate to="/home" />} />
       </>
     )}

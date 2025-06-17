@@ -1,25 +1,30 @@
 
 import db from '../DB/mysql.js';
-export const serviceGetAllSongs = async (accessType) => {
+
+export const serviceGetAllSongs = async (app) => {
     try {
-        // מביא את כל השירים עם שם האלבום שלהם
+        const approvedStatus = app === "approved" ? 1 : 0;
+
         const query = `
             SELECT songs.*, albums.name AS album_name
             FROM songs
             JOIN albums ON songs.album_id = albums.id
-            WHERE songs.approved = 1
+            WHERE songs.approved = ?
         `;
-        const [results] = await db.promise().query(query);
+
+        const [results] = await db.promise().query(query, [approvedStatus]);
         return results;
     } catch (err) {
         throw err;
     }
 };
 
+
 export const serviceGetSongById = async (id, accessType) => {
     try {
-        //אם אתה מנהל אתה יכול לקבל שיר גם אם הוא לא אושר
-        const query = 'SELECT * FROM songs WHERE id = ? AND approved = 1';
+        const query = accessType === 'admin'
+            ? 'SELECT * FROM songs WHERE id = ?'
+            : 'SELECT * FROM songs WHERE id = ? AND approved = 1';
         const [results] = await db.promise().query(query, [id]);
         return results[0] || null;
     } catch (err) {
@@ -128,4 +133,19 @@ export const serviceGetRecentSongs = async (limit = 5, offset = 0) => {
     `;
     const [results] = await db.promise().query(query, [limit, offset]);
     return results;
+};
+
+export const serviceGetUserfavoriteSongs = async (userId) => {
+    try {
+        const query = `
+           SELECT s.*
+           FROM songs s
+           JOIN likes l ON s.id = l.song_id
+           WHERE l.user_id = ?
+        `;
+        const [results] = await db.promise().query(query, [userId]);
+        return results;
+    } catch (err) {
+        throw err;
+    }
 };

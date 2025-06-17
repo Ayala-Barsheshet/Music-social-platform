@@ -10,7 +10,7 @@ export const createToken = (user) => {
   return jwt.sign(
     {
       id: user.id,
-      accessType: user.accessType || "user"
+      accessType: user.access_type || "user"
     },
     process.env.JWT_SECRET
     //, { expiresIn: '1h' }

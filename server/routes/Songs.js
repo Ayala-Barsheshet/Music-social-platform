@@ -5,6 +5,8 @@ import {
   getSongById,
   getRecommendedSongs,
   getRecentSongs,
+  getUserfavoriteSongs,
+  getUnapprovedSongs,
   addSong,
   updateSong,
   deleteSong
@@ -15,6 +17,8 @@ const router = express.Router();
 router.use(auth); //every rout below this code will pass first in auth before executing the controller
 router.get('/recommended', getRecommendedSongs);
 router.get('/recent', getRecentSongs);
+router.get('/user-favorites', getUserfavoriteSongs);
+router.get('/unapproved', getUnapprovedSongs);
 
 router.get('/', getAllSongs);
 router.get('/:id', getSongById);

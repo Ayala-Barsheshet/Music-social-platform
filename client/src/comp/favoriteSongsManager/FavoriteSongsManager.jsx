@@ -14,7 +14,7 @@ const FavoriteSongsManager = () => {
 
   const fetchFavoriteSongs = async () => {
     try {
-      const res = await APIRequests.getRequest("favorites");
+      const res = await APIRequests.getRequest("songs/user-favorites");
       setFavoriteSongs(res);
     } catch (err) {
       setError(err.message);
