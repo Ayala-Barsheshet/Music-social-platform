@@ -18,7 +18,7 @@ const Navbar = () => {
         <li><NavLink to="/settings">הגדרות</NavLink></li>
         {(user.accessType === "artist" || user.accessType === "admin") && (
           <>
-            <li><NavLink to="/upload">העלאה</NavLink></li>
+            <li><NavLink to="/upload-song">העלאה</NavLink></li>
             <li><NavLink to="/access-control">ניהול משתמשים</NavLink></li>
           </>
         )}

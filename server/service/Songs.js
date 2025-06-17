@@ -32,17 +32,24 @@ export const serviceGetSongById = async (id, accessType) => {
     }
 };
 
-export const serviceAddSong = async (album_id, name, lyrics, artist_name, genre, file_path, accessType) => {
+export const serviceAddSong = async (album_id, name, lyrics, artist_id, genre, file_path, accessType) => {
     try {
+
         let approved = 0; // Default to not approved
         if (accessType === 'admin') {// If the user is an admin, set approved to 1
             approved = 1;
         }
+
+        const [artistResult] = await db.promise().query(
+            'SELECT username FROM users WHERE id = ?',
+            [artist_id]
+        );
+
         const query = `
             INSERT INTO songs (album_id, name, lyrics, artist_name, genre, file_path, created_at,approved)
             VALUES (?, ?, ?, ?, ?, ?, NOW(),?)
         `;
-        const [result] = await db.promise().query(query, [album_id, name, lyrics, artist_name, genre, file_path, approved]);
+        const [result] = await db.promise().query(query, [album_id, name, lyrics, artistResult[0].username, genre, file_path, approved]);
         const [rows] = await db.promise().query('SELECT * FROM songs WHERE id = ?', [result.insertId]);
         return rows[0];
     } catch (err) {

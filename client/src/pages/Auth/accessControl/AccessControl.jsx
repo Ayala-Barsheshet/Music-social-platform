@@ -8,6 +8,10 @@ const AccessControl = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [artistRequests, setArtistRequests] = useState([]);
+  const [artistLoading, setArtistLoading] = useState(true);
+  const [artistError, setArtistError] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,9 +27,23 @@ const AccessControl = () => {
     fetchUnapprovedSongs();
   }, []);
 
+  useEffect(() => {
+    const fetchArtistRequests = async () => {
+      try {
+        const data = await APIRequests.getRequest('users/requested-artist-access');
+        setArtistRequests(data);
+        setArtistLoading(false);
+      } catch (error) {
+        setArtistError(error.message);
+        setArtistLoading(false);
+      }
+    };
+    fetchArtistRequests();
+  }, []);
+
   const handleApprove = async (songId) => {
     try {
-      await APIRequests.patchRequest(`songs/${songId}`, { approved: true });
+      await APIRequests.patchRequest(`songs/${songId}`, { approved: 1 });
       setUnapprovedSongs((prev) => prev.filter((s) => s.id !== songId));
     } catch (err) {
       console.error("Approval failed", err);
@@ -41,6 +59,33 @@ const AccessControl = () => {
     }
   };
 
+  const handleArtistApprove = async (user) => {
+    try {
+      const res = await APIRequests.patchRequest(`users`, {
+        requested_artist: 0,
+        access_type: "artist",
+        userIdToUpdate: user.id,
+      });
+      setArtistRequests((prev) => prev.filter((u) => u.id !== user.id));
+
+      setUser(updatedUser);
+    } catch (err) {
+      console.error("Approval failed", err);
+    }
+  };
+
+  const handleArtistReject = async (user) => {
+    try {
+      await APIRequests.patchRequest(`users`, {
+        requested_artist: 0,
+        userIdToUpdate: user.id,
+      });
+      setArtistRequests((prev) => prev.filter((u) => u.id !== user.id));
+    } catch (err) {
+      console.error("Rejection failed", err);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Access Control</h1>
@@ -49,7 +94,35 @@ const AccessControl = () => {
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Artist Role Requests</h2>
         <div className={styles.card}>
-          <p>No artist requests yet.</p>
+          {artistLoading ? (
+            <p>Loading...</p>
+          ) : artistRequests.length === 0 ? (
+            <p>No artist requests yet.</p>
+          ) : (
+            <ul className={styles.songList}>
+              {artistRequests.map((user) => (
+                <li key={user.id || user._id} className={styles.songItem}>
+                  <span className={styles.songInfo}>
+                    {user.username} ({user.email})
+                  </span>
+                  <div className={styles.actions}>
+                    <button
+                      className={styles.approve}
+                      onClick={() => handleArtistApprove(user)}
+                    >
+                      ✔️
+                    </button>
+                    <button
+                      className={styles.delete}
+                      onClick={() => handleArtistReject(user)}
+                    >
+                      ❌
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
 

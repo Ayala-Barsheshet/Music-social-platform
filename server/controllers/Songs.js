@@ -91,17 +91,19 @@ export const getSongById = async (req, res) => {
 
 export const addSong = async (req, res) => {
     try {
-        const accessType = req.user.accessType;  //access type from the request, got it from the token
+        const accessType = req.user.accessType;
+        const userId = req.user.id;  //access type from the request, got it from the token
+      console.log(`Adding song with access type: ${accessType}`);
+      
         if (accessType !== 'admin' && accessType !== 'artist') {
             return res.status(403).json({ message: 'Access denied' });
         }
-        const { album_id, name, lyrics, artist_name, genre, file_path } = req.body;
-
+        const { album_id, name, lyrics, genre, file_path } = req.body;
         const newSong = await serviceAddSong(
             album_id,
             name,
             lyrics,
-            artist_name,
+            userId,
             genre,
             file_path,
             accessType

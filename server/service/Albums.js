@@ -1,9 +1,11 @@
 import db from '../DB/mysql.js';
 
-export const serviceGetAllAlbums = async () => {
+export const serviceGetAllAlbums = async (artist_id) => {
   const [rows] = await db.promise().query(`
-    SELECT * FROM albums
-  `);
+SELECT * FROM albums
+WHERE artist_id =  ?
+  `, [artist_id]);
+  
   //אפשר להוסיף לימיטטטט
   return rows;
 };

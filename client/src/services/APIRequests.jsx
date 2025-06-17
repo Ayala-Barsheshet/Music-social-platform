@@ -13,7 +13,7 @@ class APIRequests extends Component {
                 headers: this.buildHeaders(false)
             });
             console.log(`Response status: ${response.status}`);
-            
+
 
             if (!response.ok) {
                 throw new Error(`GET HTTP error! status: ${response.status}`);
@@ -23,7 +23,7 @@ class APIRequests extends Component {
             return data;
 
         } catch (error) {
-          throw error; // throw the error to the client
+            throw error; // throw the error to the client
         }
 
     }
@@ -40,8 +40,8 @@ class APIRequests extends Component {
 
             const data = await response.json();
 
-               if (!response.ok) {
-                const errorMessage = data?.error || 'An error occurred' ;
+            if (!response.ok) {
+                const errorMessage = data?.error || 'An error occurred';
                 throw new Error(errorMessage);
             }
             return data;
@@ -54,11 +54,19 @@ class APIRequests extends Component {
 
     static async patchRequest(restUrl, fieldsToUpdate) {
         try {
+            console.log(`Making POST request to: ${SERVER_URL}${restUrl}`);
+
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'PATCH',
                 headers: this.buildHeaders(),
                 body: JSON.stringify(fieldsToUpdate),
             })
+
+            // const errorData = await response.json();
+            // if (!response.ok) {
+            //     const errorMessage = errorData?.error || 'Internal Server PATCH Error';
+            //     throw new Error(errorMessage);
+            // }
 
             if (!response.ok) {
                 throw new Error(`PATCH HTTP error! status: ${response.status}`);
@@ -69,7 +77,7 @@ class APIRequests extends Component {
 
         } catch (error) {
             console.error('An error occurred:', error);
-          throw error; // throw the error to the client
+            throw error; // throw the error to the client
         }
 
     }
@@ -77,7 +85,7 @@ class APIRequests extends Component {
     static async deleteRequest(restUrl) {
         try {
             console.log(`Making DELETE request to: ${SERVER_URL}${restUrl}`);
-            
+
             const response = await fetch(`${SERVER_URL}${restUrl}`, {
                 method: 'DELETE',
                 headers: this.buildHeaders(false)
@@ -89,7 +97,7 @@ class APIRequests extends Component {
 
         } catch (error) {
             console.error('An error occurred:', error);
-          throw error; // throw the error to the client
+            throw error; // throw the error to the client
         }
 
     }
