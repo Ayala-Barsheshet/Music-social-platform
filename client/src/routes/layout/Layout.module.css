@@ -1,0 +1,23 @@
+/* קונטיינר חיצוני */
+.layoutContainer {
+  display: flex;
+}
+
+/* סיידבר קבוע */
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(14, 14, 14, 0.8);
+  z-index: 1000;
+}
+
+/* תוכן עיקרי גולל רגיל */
+.mainContent {
+  margin-left: 240px; /* מפנה מקום לסיידבר */
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+}

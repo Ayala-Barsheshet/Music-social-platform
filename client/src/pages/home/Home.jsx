@@ -90,8 +90,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import APIRequests from "../services/APIRequests";
-import { useUser } from "../services/UserProvider";
+import APIRequests from "../../services/APIRequests";
+import { useUser } from "../../services/UserProvider";
 
 const Home = () => {
   const [recommendedSongs, setRecommendedSongs] = useState([]);

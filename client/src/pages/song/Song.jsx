@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import APIRequests from "../../services/APIRequests.jsx";
 // import styles from "./Song.css";
-import Comments from "../comments/comments.jsx";
+import Comments from "../../comp/comments/comments.jsx";
 
 const Song = () => {
   const { songId } = useParams();
