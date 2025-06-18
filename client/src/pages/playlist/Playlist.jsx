@@ -61,36 +61,37 @@ const Playlist = () => {
       {error && <div className={styles.error}>{error}</div>}
       <h1 className={styles.playlistName}>{playlistInfo.name}</h1>
       <p className={styles.playlistDescription}>{playlistInfo.description}</p>
-
-      <div className={styles.songList}>
-        {songs.map((song) => (
-          <div key={song.id} className={styles.songRow}>
-            <div
-              onClick={() => goToSong(song.id)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  goToSong(song.id);
-                }
-              }}
-              className={styles.songInfo}
-            >
-              <span className={styles.songName}>{song.name}</span>
-              <span className={styles.artistName}>{song.artist_name}</span>
-              <span className={styles.genre}>{song.genre}</span>
+      {songs.length === 0 ? (
+        <p>No songs in this playlist.</p>
+      ) : (
+        <div className={styles.songList}>
+          {songs.map((song) => (
+            <div key={song.id} className={styles.songRow}>
+              <div
+                onClick={() => goToSong(song.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    goToSong(song.id);
+                  }
+                }}
+                className={styles.songInfo}
+              >
+                <span className={styles.songName}>{song.name}</span>
+                <span className={styles.artistName}>{song.artist_name}</span>
+                <span className={styles.genre}>{song.genre}</span>
+              </div>
+              <button
+                onClick={() => removeSongFromPlaylist(song.id)}
+                className={styles.removeButton}
+              >
+                delete song from playlist
+              </button>
             </div>
-
-            <button
-              onClick={() => removeSongFromPlaylist(song.id)}
-              className={styles.removeButton}
-            >
-              delete song from playlist
-            </button>
-          </div>
-        ))}
-      </div>
-
+          ))}
+        </div>
+      )}
       <button
         onClick={searchSongToAdd}
         className={styles.addButton}

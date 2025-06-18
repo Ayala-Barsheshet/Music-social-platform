@@ -1,29 +1,53 @@
-
 .container {
-  padding: 20px;
+  padding: 30px;
+  min-height: 100vh;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .playlistName {
-  font-size: 2rem;
-  margin-bottom: 5px;
+  font-size: 48px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #ffffff, #1db954);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .playlistDescription {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 30px;
+  font-size: 16px;
+  color: #b3b3b3;
+  margin-bottom: 40px;
   max-width: 600px;
+  line-height: 1.5;
 }
 
 .songList {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  margin-bottom: 40px;
 }
 
 .songRow {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.songRow:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(29, 185, 84, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .songInfo {
@@ -31,51 +55,131 @@
   flex-grow: 1;
   display: flex;
   gap: 20px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.songInfo:hover {
+  background: rgba(29, 185, 84, 0.1);
 }
 
 .songName {
   font-weight: 600;
+  color: #ffffff;
+  font-size: 16px;
+  min-width: 200px;
 }
 
 .artistName {
-  color: #555;
+  color: #b3b3b3;
+  font-size: 14px;
+  min-width: 150px;
 }
 
 .genre {
-  color: #888;
+  color: #1db954;
   font-style: italic;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(29, 185, 84, 0.1);
+  padding: 4px 8px;
+  border-radius: 12px;
+  min-width: 80px;
+  text-align: center;
 }
 
 .removeButton {
-  margin-left: 10px;
-  padding: 4px 8px;
-  font-size: 0.75rem;
+  margin-left: 16px;
+  padding: 8px 16px;
+  font-size: 12px;
   cursor: pointer;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
-  color: #333;
-  height: 28px;
-  min-width: 100px;
-  transition: background-color 0.2s ease;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 107, 107, 0.5);
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .removeButton:hover {
-  background-color: #e0e0e0;
+  background: rgba(255, 107, 107, 0.2);
+  border-color: #ff6b6b;
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .addButton {
   margin-top: 30px;
-  padding: 10px 20px;
+  padding: 16px 32px;
   cursor: pointer;
-  font-size: 1rem;
-  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 25px;
   border: none;
-  background-color: #1db954;
+  background: linear-gradient(135deg, #1db954, #1ed760);
   color: white;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(29, 185, 84, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.addButton::before {
+  content: "+";
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .addButton:hover {
-  background-color: #17a44d;
+  background: linear-gradient(135deg, #1ed760, #1db954);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+}
+
+.error {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+/* Empty state */
+.container p {
+  color: #b3b3b3a8;
+  font-size: 16px;
+  text-align: center;
+  margin: 40px 0;
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .songInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .songName,
+  .artistName,
+  .genre {
+    min-width: auto;
+  }
+  
+  .playlistName {
+    font-size: 32px;
+  }
+  
+  .removeButton {
+    margin-left: 0;
+    margin-top: 8px;
+    align-self: flex-end;
+  }
 }

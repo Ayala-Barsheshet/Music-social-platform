@@ -80,17 +80,17 @@ const SongSearch = () => {
             await APIRequests.postRequest(`playlist-songs/${playlistId}/songs/${songId}`);
             setAddedSongs((prev) => [...prev, songId]);
         } catch (err) {
-          setError(err.message || "Failed to fetch add song to playlist");
+            setError(err.message || "Failed to fetch add song to playlist");
         }
     };
 
     return (
         <div className={styles.songSearchPage}>
-        {error && (
-            <div className={styles.errorMessage}>
-                {error}
-            </div>
-        )}
+            {error && (
+                <div className={styles.errorMessage}>
+                    {error}
+                </div>
+            )}
             <div className={styles.searchControls}>
                 <div className={styles.searchWrapper}>
                     <input
@@ -146,6 +146,9 @@ const SongSearch = () => {
             )}
 
             <div className={styles.songsSection}>
+                {filteredSongs.length === 0 && (
+                    <div className={styles.noResultsMessage}>No results found.</div>
+                )}
                 {sortOption === "album" ? (
                     Object.entries(groupByAlbum(filteredSongs)).map(
                         ([albumName, songs]) => (

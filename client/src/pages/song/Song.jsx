@@ -85,40 +85,42 @@ const Song = () => {
       {actionError && <div className={styles.error}>{actionError}</div>}
 
       <video controls className={styles.myVideo}>
-        <source src={song.file_path} type="video/mp4" />
+        <source src={`http://localhost:3000${song.file_path}`} type="video/mp4" />
         Your browser does not support video.
       </video>
 
-      <div className={styles.songActions}>
-        <div className={`${styles.icon} ${styles.like}`} onClick={() => handleAction("liked", setLiked, liked)} title="Like">
-          {liked ? "👍" : "👍🏻"} <span className={styles.likeCount}>{likeCount}</span>
-        </div>
-        <div className={`${styles.icon} ${styles.love}`} onClick={() => handleAction("loved", setLoved, loved)} title="Add to favorites">
-          {loved ? "❤️" : "🤍"}
-        </div>
-      </div>
-
       <div className={styles.songInfo}>
-        <div className={styles.nameArtist}>
-          {song.name} | {song.artist_name}
+        <div className={styles.songDetails}>
+          <div className={styles.nameArtist}>
+            {song.name} | {song.artist_name}
+          </div>
+          <div className={styles.createdAt}>
+            {new Date(song.created_at).toLocaleDateString("he-IL", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
         </div>
-        <div className={styles.createdAt}>
-          {new Date(song.created_at).toLocaleDateString("he-IL", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </div>
-      </div>
 
-      {song.lyrics && (
-        <div className={styles.lyricsSection}>
-          <button className={styles.lyricsBtn} onClick={() => setShowLyrics((prev) => !prev)}>
-            {showLyrics ? "Hide lyrics" : "Show lyrics"}
-          </button>
-          {showLyrics && <pre className={styles.lyrics}>{song.lyrics}</pre>}
+        <div className={styles.songActionsInInfo}>
+          <div className={`${styles.icon} ${styles.like}`} onClick={() => handleAction("liked", setLiked, liked)} title="Like">
+            {liked ? "👍" : "👍🏻"} <span className={styles.likeCount}>{likeCount}</span>
+          </div>
+          <div className={`${styles.icon} ${styles.love}`} onClick={() => handleAction("loved", setLoved, loved)} title="Add to favorites">
+            {loved ? "❤️" : "🤍"}
+          </div>
         </div>
-      )}
+
+        {song.lyrics && (
+          <div className={styles.lyricsInInfo}>
+            <button className={styles.lyricsBtn} onClick={() => setShowLyrics((prev) => !prev)}>
+              {showLyrics ? "Hide lyrics" : "Show lyrics"}
+            </button>
+            {showLyrics && <pre className={styles.lyrics}>{song.lyrics}</pre>}
+          </div>
+        )}
+      </div>
 
       <Comments songId={songId} />
     </div>

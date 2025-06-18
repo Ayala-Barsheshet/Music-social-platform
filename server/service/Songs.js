@@ -39,7 +39,7 @@ export const serviceGetUserFavoriteSongs = async (userId) => {
            SELECT s.*
            FROM songs s
            JOIN likes l ON s.id = l.song_id
-           WHERE l.user_id = ?
+           WHERE l.user_id = ? AND l.loved = TRUE
         `;
         const [results] = await db.promise().query(query, [userId]);
         return results;

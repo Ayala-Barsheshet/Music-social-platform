@@ -1,124 +1,10 @@
+/* Modern Spotify-inspired Song Component */
 
-.single-song-page {
-  width: 40vw; /* כמעט כל רוחב המסך */
-  height: 30vh; /* גובה גדול מאוד */
-  margin: 20px auto;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.2); /* שקיפות גבוהה */
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2); /* צל יותר מודגש */
-  border-radius: 24px;
-  font-family: 'Segoe UI', sans-serif;
-  color: #fff; /* טקסט לבן כדי שייראה על רקע כהה */
-  backdrop-filter: blur(12px); /* אפקט זכוכית */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* מסגרת חצי שקופה */
-}
-
-
-audio {
-  width: 100%;
-  margin-bottom: 20px;
-  border-radius: 8px;
-}
-
-.song-actions {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  font-size: 24px;
-}
-
-.icon {
-  cursor: pointer;
-  transition: transform 0.2s ease, color 0.3s ease;
-}
-
-.icon:hover {
-  transform: scale(1.2);
-}
-
-.icon.like {
-  color: #666;
-}
-
-.icon.love {
-  color: #999;
-}
-
-.icon.like.active {
-  color: #007bff;
-}
-
-.icon.love.active {
-  color: #e0245e;
-}
-
-.song-info {
-  margin-bottom: 20px;
-}
-
-.name-artist {
-  font-size: 1.4rem;
-  font-weight: bold;
-}
-
-.created-at {
-  font-size: 0.95rem;
-  color: #777;
-  margin-top: 4px;
-}
-
-/* אופציונלי: קונפוננטת תגובות */
-.comments-section {
-  margin-top: 30px;
-}
-
-
-.icon {
-  cursor: pointer;
-  transition: transform 0.2s ease, filter 0.3s ease;
-  font-size: 28px;
-}
-
-.icon:hover {
-  transform: scale(1.3);
-}
-
-
-.lyrics-section {
-  margin-top: 20px;
-  text-align: right;
-}
-
-.lyrics-section button {
-  margin-bottom: 10px;
-  padding: 6px 12px;
-  background-color: #eeeeee;
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: bold;
-}
-
-.lyrics-section .lyrics {
-  white-space: pre-wrap;
-  background: #f9f9f9;
-  padding: 10px;
-  border-radius: 8px;
-  line-height: 1.6;
-  direction: rtl;
-}
-.my-video {
-
-  width: 400px;
-  height: 400px; /* או height: 300px אם את רוצה גובה קבוע */
-  border-radius: 12px; /* אם בא לך עיצוב עגול */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* הצללה */
-}
 .singleSongPage {
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+  background: transparent; /* שקוף כדי לראות את הרקע */
   min-height: 100vh;
   padding: 2rem;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
   color: white;
   display: flex;
   flex-direction: column;
@@ -127,147 +13,315 @@ audio {
 }
 
 .loading {
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #1db954;
-  font-weight: 600;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 2rem 4rem;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .myVideo {
   width: 100%;
-  max-width: 800px;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(29, 185, 84, 0.2);
-  background: #000;
+  max-width: 700px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(29, 185, 84, 0.3);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
+.myVideo:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 40px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(29, 185, 84, 0.4);
+}
+
+.myVideo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(29, 185, 84, 0.1) 0%, 
+    transparent 50%, 
+    rgba(29, 185, 84, 0.1) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* נסתיר את songActions הישן */
 .songActions {
-  display: flex;
-  gap: 2rem;
-  margin: 1rem 0;
-  padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 50px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: none;
 }
 
 .icon {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.8rem;
+  gap: 0.7rem;
+  font-size: 1.6rem;
   cursor: pointer;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  transition: all 0.3s ease;
+  padding: 0.8rem 1.2rem;
+  border-radius: 30px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   user-select: none;
   background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.icon:hover::before {
+  left: 100%;
 }
 
 .icon:hover {
-  transform: translateY(-3px) scale(1.05);
-  background: rgba(29, 185, 84, 0.2);
-  box-shadow: 0 8px 20px rgba(29, 185, 84, 0.3);
+  transform: translateY(-4px) scale(1.08);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
 }
 
 .like:hover {
   background: rgba(59, 130, 246, 0.2);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
+  border-color: rgba(59, 130, 246, 0.5);
 }
 
 .love:hover {
   background: rgba(239, 68, 68, 0.2);
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 12px 25px rgba(239, 68, 68, 0.4);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.icon:active {
+  transform: translateY(-2px) scale(1.05);
 }
 
 .likeCount {
-  font-size: 1rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(59, 130, 246, 0.2);
-  padding: 0.2rem 0.6rem;
-  border-radius: 12px;
-  min-width: 24px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.5));
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  min-width: 28px;
   text-align: center;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
 .songInfo {
   text-align: center;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-  padding: 2rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  max-width: 600px;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(25px);
+  padding: 1rem 3rem;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 800px;
   width: 100%;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.songInfo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.5), transparent);
+}
+
+.songDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.songActionsInInfo {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.lyricsInInfo {
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .nameArtist {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  background: linear-gradient(45deg, #fff, #1db954);
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  background: linear-gradient(135deg, #fff 0%, #1db954 50%, #1ed760 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 5px rgba(29, 185, 84, 0.3)); }
+  to { filter: drop-shadow(0 0 10px rgba(29, 185, 84, 0.5)); }
 }
 
 .createdAt {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
   font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
+/* נסתיר את lyricsSection הישן */
 .lyricsSection {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  max-width: 800px;
-  width: 100%;
+  display: none;
 }
 
 .lyricsBtn {
-  background: linear-gradient(45deg, #1db954, #1ed760);
+  background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
   color: white;
   border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 25px;
-  font-size: 1rem;
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin-bottom: 2rem;
+  box-shadow: 
+    0 8px 20px rgba(29, 185, 84, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.lyricsBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.lyricsBtn:hover::before {
+  left: 100%;
 }
 
 .lyricsBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(29, 185, 84, 0.4);
-  background: linear-gradient(45deg, #1ed760, #1db954);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    0 15px 30px rgba(29, 185, 84, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #1ed760 0%, #1db954 100%);
+}
+
+.lyricsBtn:active {
+  transform: translateY(-1px) scale(1.01);
 }
 
 .lyrics {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  font-family: 'Georgia', serif;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 2rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.15rem;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.95);
   white-space: pre-wrap;
   overflow-x: auto;
   direction: rtl;
   text-align: right;
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.3px;
+}
+
+/* Scrollbar styling for lyrics */
+.lyrics::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lyrics::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.lyrics::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.6);
+  border-radius: 4px;
+}
+
+.lyrics::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.8);
 }
 
 /* Responsive Design */
@@ -279,28 +333,44 @@ audio {
   
   .myVideo {
     max-width: 100%;
+    border-radius: 15px;
   }
   
   .songActions {
     gap: 1rem;
-    padding: 0.8rem 1.5rem;
+    padding: 1rem 2rem;
+    border-radius: 40px;
   }
   
   .icon {
-    font-size: 1.5rem;
-    padding: 0.6rem 1rem;
+    font-size: 1.4rem;
+    padding: 0.7rem 1rem;
   }
   
   .songInfo {
-    padding: 1.5rem;
+    padding: 2rem;
+    border-radius: 20px;
+    gap: 1.5rem;
+  }
+  
+  .songActionsInInfo {
+    gap: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
   }
   
   .nameArtist {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
   
   .lyricsSection {
-    padding: 1.5rem;
+    padding: 2rem;
+    border-radius: 15px;
+  }
+  
+  .lyricsBtn {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
   }
 }
 
@@ -311,16 +381,59 @@ audio {
   
   .songActions {
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
+    gap: 0.8rem;
+    padding: 1.5rem;
+    border-radius: 25px;
   }
   
   .nameArtist {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
   
   .lyrics {
     font-size: 1rem;
-    padding: 1rem;
+    padding: 1.5rem;
+    line-height: 1.8;
   }
+  
+  .songInfo {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .songActionsInInfo {
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem;
+    border-radius: 20px;
+  }
+  
+  .lyricsSection {
+    padding: 1.5rem;
+  }
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.loading {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Hover effects for better interactivity */
+.songInfo:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.lyricsSection:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }

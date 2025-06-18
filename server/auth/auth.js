@@ -3,7 +3,10 @@ import jwt from 'jsonwebtoken';
 
 export const hashPassword = async (clientPassword) => {
   const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
-  return await bcrypt.hash(clientPassword, saltRounds);
+  console.log("Password before hash:", clientPassword);
+  const hashedPassword = await bcrypt.hash(clientPassword, saltRounds);
+  console.log("Password after hash:", hashedPassword);
+  return hashedPassword;
 };
 
 export const createToken = (user) => {

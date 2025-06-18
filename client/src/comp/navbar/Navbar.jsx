@@ -8,7 +8,7 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <h2 className={styles.logo}>MySpotify</h2>
+      <h2 className={styles.logo}>Spotify&Share</h2>
       <ul className={styles.navLinks}>
         <button className={styles.logoutButton} onClick={logout}></button>
         <li><NavLink to="/" end></NavLink></li>

@@ -9,10 +9,7 @@ const FavoriteSongsManager = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchFavoriteSongs();
-  }, []);
-
-  const fetchFavoriteSongs = async () => {
+     const fetchFavoriteSongs = async () => {
     try {
       const res = await APIRequests.getRequest("songs/user-favorites");
       setFavoriteSongs(res);
@@ -20,6 +17,8 @@ const FavoriteSongsManager = () => {
       setError(err.message);
     }
   };
+    fetchFavoriteSongs();
+  }, []);
 
   const goToSong = (songId) => {
     navigate(`/songs/${songId}`);

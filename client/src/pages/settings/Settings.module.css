@@ -1,69 +1,156 @@
 .settings {
-  max-width: 600px;
-  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0, 128, 128, 0.2);
-  font-family: "Segoe UI", sans-serif;
-  direction: rtl;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .settings h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
   text-align: center;
-  color: #008080;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #fff, #1db954, #1ed760);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(29, 185, 84, 0.3);
 }
 
 .settings h3 {
-  color: #00796b;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: white;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 .settings input {
-  display: block;
   width: 100%;
-  padding: 0.7rem;
-  margin: 0.5rem 0;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  transition: border-color 0.3s ease;
+  max-width: 400px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
   font-size: 1rem;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.settings input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .settings input:focus {
-  border-color: #009688;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 150, 136, 0.2);
+  border-color: rgba(29, 185, 84, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(29, 185, 84, 0.3);
+  transform: translateY(-2px);
 }
 
 .settings button {
-  background: #009688;
+  padding: 1.2rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1db954, #1ed760);
   color: white;
   border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 2rem;
-  font-size: 1rem;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background 0.3s ease;
-  margin-top: 1.5rem;
+  transition: all 0.4s ease;
+  box-shadow: 
+    0 8px 32px rgba(29, 185, 84, 0.3),
+    0 0 20px rgba(29, 185, 84, 0.2);
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .settings button:hover {
-  background: #00796b;
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(135deg, #1ed760, #22c55e);
+  box-shadow: 
+    0 12px 40px rgba(29, 185, 84, 0.4),
+    0 0 30px rgba(29, 185, 84, 0.3);
+}
+
+.settings button:active {
+  transform: translateY(-1px) scale(1.01);
+}
+
+.successMessage {
+  text-align: center;
+  margin-top: 1rem;
+  padding: 1.2rem 2rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  backdrop-filter: blur(15px);
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #86efac;
+  animation: slideIn 0.5s ease-out;
 }
 
 .settings p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
   text-align: center;
-  color: #333;
-  margin-top: 1rem;
-  font-weight: bold;
+  max-width: 400px;
+  margin-bottom: 1rem;
 }
-.successMessage {
-  color: #2e7d32;
-  text-align: center;
-  margin-top: 1rem;
-  font-weight: bold;
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settings {
+    padding: 1rem;
+  }
+
+  .settings h2 {
+    font-size: 2rem;
+  }
+
+  .settings input {
+    font-size: 0.95rem;
+  }
+
+  .settings button {
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings h2 {
+    font-size: 1.8rem;
+  }
+
+  .settings input {
+    padding: 0.9rem 1rem;
+  }
+
+  .settings button {
+    padding: 0.9rem 1.2rem;
+  }
 }
