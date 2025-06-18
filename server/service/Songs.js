@@ -1,23 +1,105 @@
 
 import db from '../DB/mysql.js';
 
-export const serviceGetAllSongs = async (app) => {
+
+export const serviceGetMostLikedSongs = async (limit = 5, offset = 0) => {
+    const query = `
+    SELECT 
+    songs.*, 
+    COUNT(CASE WHEN likes.liked = 1 THEN 1 END) AS likes_count
+    FROM songs
+    LEFT JOIN likes ON songs.id = likes.song_id
+    WHERE songs.approved = 1
+    GROUP BY songs.id
+    HAVING COUNT(CASE WHEN likes.liked = 1 THEN 1 END) > 0
+    ORDER BY likes_count DESC
+    LIMIT ? OFFSET ?
+
+    `;
+    const [results] = await db.promise().query(query, [limit, offset]);
+    return results;
+};
+
+
+export const serviceGetRecentSongs = async (limit = 5, offset = 0) => {
+    const query = `
+        SELECT * FROM songs
+        WHERE approved = 1
+        ORDER BY created_at DESC
+        LIMIT ? OFFSET ?
+    `;
+    const [results] = await db.promise().query(query, [limit, offset]);
+    return results;
+};
+
+
+export const serviceGetUserFavoriteSongs = async (userId) => {
     try {
-        const approvedStatus = app === "approved" ? 1 : 0;
-
         const query = `
-            SELECT songs.*, albums.name AS album_name
-            FROM songs
-            JOIN albums ON songs.album_id = albums.id
-            WHERE songs.approved = ?
+           SELECT s.*
+           FROM songs s
+           JOIN likes l ON s.id = l.song_id
+           WHERE l.user_id = ?
         `;
-
-        const [results] = await db.promise().query(query, [approvedStatus]);
+        const [results] = await db.promise().query(query, [userId]);
         return results;
     } catch (err) {
         throw err;
     }
 };
+
+
+// export const serviceGetAllSongs = async (app) => {
+//     try {
+//         const approvedStatus = app === "approved" ? 1 : 0;
+
+//         const query = `
+//             SELECT songs.*, albums.name AS album_name
+//             FROM songs
+//             JOIN albums ON songs.album_id = albums.id
+//             WHERE songs.approved = ?
+//         `;
+
+//         const [results] = await db.promise().query(query, [approvedStatus]);
+//         return results;
+//     } catch (err) {
+//         throw err;
+//     }
+// };
+
+
+export const serviceGetUnApprovedSongs = async () => {
+  try {
+    const query = `
+      SELECT songs.id, songs.name, songs.genre, songs.file_path, songs.approved
+      FROM songs
+      WHERE songs.approved = 0
+    `;
+
+    const [results] = await db.promise().query(query);
+    return results;
+  } catch (err) {
+    throw err;
+  }
+};
+
+
+export const serviceGetApprovedSongs = async () => {
+  try {
+    const query = `
+      SELECT songs.*, albums.name AS album_name
+      FROM songs
+      JOIN albums ON songs.album_id = albums.id
+      WHERE songs.approved = 1
+    `;
+
+    const [results] = await db.promise().query(query);
+    return results;
+  } catch (err) {
+    throw err;
+  }
+};
+
 
 
 export const serviceGetSongById = async (id, accessType) => {
@@ -32,11 +114,12 @@ export const serviceGetSongById = async (id, accessType) => {
     }
 };
 
+
 export const serviceAddSong = async (album_id, name, lyrics, artist_id, genre, file_path, accessType) => {
     try {
 
-        let approved = 0; // Default to not approved
-        if (accessType === 'admin') {// If the user is an admin, set approved to 1
+        let approved = 0;
+        if (accessType === 'admin') {
             approved = 1;
         }
 
@@ -57,18 +140,26 @@ export const serviceAddSong = async (album_id, name, lyrics, artist_id, genre, f
     }
 };
 
+
+export const serviceDeleteSong = async (id) => {
+    try {
+        const query = 'DELETE FROM songs WHERE id = ?';
+        await db.promise().query(query, [id]);
+    } catch (err) {
+        throw err;
+    }
+};
+
+
 export const serviceUpdateSong = async (id, fieldsToUpdate, token) => {
     try {
         if (token.accessType !== 'admin') {
             await checkArtistPermissions(id, token, fieldsToUpdate);
         }
-
         const keys = Object.keys(fieldsToUpdate);
         const values = Object.values(fieldsToUpdate);
         if (keys.length === 0) throw new Error('No fields to update');
-
         const setClause = keys.map(key => `${key} = ?`).join(', ');
-
         const query = `
             UPDATE songs
             SET ${setClause}
@@ -84,14 +175,6 @@ export const serviceUpdateSong = async (id, fieldsToUpdate, token) => {
     }
 };
 
-export const serviceDeleteSong = async (id) => {
-    try {
-        const query = 'DELETE FROM songs WHERE id = ?';
-        await db.promise().query(query, [id]);
-    } catch (err) {
-        throw err;
-    }
-};
 
 const checkArtistPermissions = async (songId, token, fieldsToUpdate) => {
     const [songs] = await db.promise().query(
@@ -109,50 +192,5 @@ const checkArtistPermissions = async (songId, token, fieldsToUpdate) => {
         if ('approved' in fieldsToUpdate) {
             throw new Error('Artist cannot update approval status');
         }
-    }
-};
-
-
-
-export const serviceGetRecommendedSongs = async (limit = 5, offset = 0) => {
-    const query = `
-SELECT 
-  songs.*, 
-  COUNT(CASE WHEN likes.liked = 1 THEN 1 END) AS likes_count
-FROM songs
-LEFT JOIN likes ON songs.id = likes.song_id
-WHERE songs.approved = 1
-GROUP BY songs.id
-ORDER BY likes_count DESC
-LIMIT ? OFFSET ?
-
-    `;
-    const [results] = await db.promise().query(query, [limit, offset]);
-    return results;
-};
-
-export const serviceGetRecentSongs = async (limit = 5, offset = 0) => {
-    const query = `
-        SELECT * FROM songs
-        WHERE approved = 1
-        ORDER BY created_at DESC
-        LIMIT ? OFFSET ?
-    `;
-    const [results] = await db.promise().query(query, [limit, offset]);
-    return results;
-};
-
-export const serviceGetUserfavoriteSongs = async (userId) => {
-    try {
-        const query = `
-           SELECT s.*
-           FROM songs s
-           JOIN likes l ON s.id = l.song_id
-           WHERE l.user_id = ?
-        `;
-        const [results] = await db.promise().query(query, [userId]);
-        return results;
-    } catch (err) {
-        throw err;
     }
 };

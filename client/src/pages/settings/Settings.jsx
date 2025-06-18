@@ -10,36 +10,28 @@ const Settings = () => {
   const [artistMessage, setArtistMessage] = useState("");
 
 
-  // Load user details into the form
-  useEffect(() => {
-    if (user) {
-      setForm({ username: user.username, email: user.email });
-    }
-  }, [user]);
-
-  // Update personal info
   const handleUpdateInfo = async () => {
     try {
-      await APIRequests.patchRequest('users', { username: form.username, email: form.email });
-      const updatedUser = { ...user, ...form };
+       const updatedUser = await APIRequests.patchRequest('users', { username: form.username, email: form.email });
       setUser(updatedUser);
       sessionStorage.setItem("currentUser", JSON.stringify(updatedUser));
       setMessage("Details updated successfully");
     } catch (error) {
-      setMessage("Error updating details");
+      setMessage(error.message||"Error updating details");
     }
   };
 
-  // Request to become an artist
-  const handleArtistRequest = async () => {
+
+  const handleBecomeArtistRequest = async () => {
     try {
       await APIRequests.patchRequest('users', { requested_artist: 1 });
-      setArtistMessage("Your request has been sent and is awaiting admin approval.");
+      setArtistMessage("Your request to become an artist has been sent and is awaiting admin approval.");
     }
     catch (err) {
-      setArtistMessage(err.message);
+      setArtistMessage(err.message || "Error sending request to become an artist.");
     }
   };
+
 
   return (
     <div className={styles.settings}>
@@ -68,7 +60,7 @@ const Settings = () => {
           {user.requested_artist ? (
             <p>Your request has already been sent. Please wait for admin approval.</p>
           ) : (
-            <button onClick={handleArtistRequest}>Send Request to Become an Artist</button>
+            <button onClick={handleBecomeArtistRequest}>Send Request to Become an Artist</button>
           )}
         </>
       )}

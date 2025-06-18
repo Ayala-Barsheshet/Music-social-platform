@@ -4,7 +4,7 @@ import userRoutes from './routes/Users.js';
 import albumRoutes from './routes/Albums.js';
 import songRoutes from './routes/Songs.js';
 import playlistRoutes from './routes/Playlists.js';
-import playlistSongesRoutes from './routes/playlist-songs.js';
+import playlistSongesRoutes from './routes/Playlist-songs.js';
 import commentRoutes from './routes/Comments.js';
 import likesLovesRoutes from './routes/Likes-loves.js';
 import cors from 'cors';
@@ -13,12 +13,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
-// app.use(cors());
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}));
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use('/users', userRoutes);

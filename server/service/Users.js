@@ -5,7 +5,6 @@ import { hashPassword } from '../auth/auth.js';
 
 export const serviceLoginUser = async (username, password) => {
     try {
-        console.log(`Attempting to log in user: ${username}`, password ? 'with password provided' : 'without password');
 
         const userQuery = `
             SELECT users.*, passwords.hash 
@@ -20,13 +19,9 @@ export const serviceLoginUser = async (username, password) => {
         }
 
         const user = users[0];
+
         const actualPassword = user.hash;
-
-        console.log(`Comparing user.hash from db: ${user.hash}  with Password: ${password}`)
-
         const isMatch = await bcrypt.compare(password, actualPassword);
-
-        console.log(`Password match result: ${isMatch}`);
 
         if (!isMatch) {
             throw new Error('Invalid username or password');
@@ -44,7 +39,9 @@ export const serviceRegisterUser = async (username, password, email) => {
         const [users] = await db.promise().query(userQuery, [username]);
 
         if (users.length) {
-            throw new Error('Registration could not be completed. Please try a different username or email');
+            const error = new Error('Username already exists');
+            error.statusCode = 409;
+            throw error;
         }
 
         const insertUserQuery = 'INSERT INTO users (username, email, access_type, created_at) VALUES (?, ?, "user", NOW())';
@@ -79,47 +76,78 @@ export const serviceGetRequestedArtistAccess = async () => {
     }
 };
 
-export const serviceUpdateUserDetails = async ({ updaterUserId, email, phone, username, requested_artist, access_type, updaterAccessType, userIdToUpdate, currentPassword, newPassword }) => {
+export const serviceUpdateUserDetails = async ({
+    email,
+    username,
+    updaterUserId,
+    requested_artist,
+    access_type,
+    updaterAccessType,
+    userIdToUpdate
+}) => {
     try {
-        // Update only provided fields
-        const fields = [];
-        const vals = [];
-        if (email !== undefined) { fields.push("email = ?"); vals.push(email); }
-        if (phone !== undefined) { fields.push("phone = ?"); vals.push(phone); }
-        if (username !== undefined) { fields.push("username = ?"); vals.push(username); }
-
-        if (fields.length) {
-            vals.push(updaterUserId);
-            await db.promise().query(
-                `UPDATE users SET ${fields.join(", ")} WHERE id = ?`, vals);
+        // Update only provided fields by user himself
+        if (email !== undefined || username !== undefined) {
+            await updateUserProfile(email, username, updaterUserId);
         }
 
-        // Handle requested_artist update 
+        // Update requested_artist by manager or user 
         if (requested_artist !== undefined) {
-            let targetUserId;
-            if (updaterAccessType === 'admin' && userIdToUpdate !== undefined) {
-                targetUserId = userIdToUpdate;
-            } else if (updaterAccessType === 'user') {
-                targetUserId = updaterUserId;
-            } else {
-                throw new Error("Unauthorized to update requested_artist");
-            }
-            await db.promise().query(`UPDATE users SET requested_artist = ? WHERE id = ?`, [requested_artist, targetUserId]);
+            await updateRequestedArtist(requested_artist, updaterAccessType, updaterUserId, userIdToUpdate);
         }
 
-        // Update access_type by manager to artist
-        // in order to know in controllers if renew the token with the updated access type field
-        let accessTypeUpdated = false;
-        if (access_type !== undefined && updaterAccessType === 'admin') {
-            await db.promise().query(
-                `UPDATE users SET access_type = ? WHERE id = ?`, [access_type, userIdToUpdate]);
-            accessTypeUpdated = true;
+        // Update user access_type by manager
+        if (access_type !== undefined) {
+            await updateUserAccessType(access_type, updaterAccessType, userIdToUpdate);
         }
-        
-        const [[updatedUser]] = await db.promise().query(`SELECT * FROM users WHERE id = ?`, [updaterUserId]);
-        return { ...updatedUser, accessTypeUpdated };
+
+        // Return the updated user (after all changes)
+        const targetUserId =
+            updaterAccessType === 'admin' && userIdToUpdate !== undefined
+                ? userIdToUpdate
+                : updaterUserId;
+
+        const [users] = await db.promise().query('SELECT * FROM users WHERE id = ?', [targetUserId]);
+        return users[0];
 
     } catch (error) {
         throw error;
     }
+};
+
+
+const updateUserProfile = async (email, username, userId) => {
+    const fields = [];
+    const vals = [];
+
+    if (email !== undefined) { fields.push("email = ?"); vals.push(email); }
+    if (username !== undefined) { fields.push("username = ?"); vals.push(username); }
+
+    if (fields.length) {
+        vals.push(userId);
+        await db.promise().query(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`, vals);
+    }
+};
+
+
+const updateRequestedArtist = async (requested_artist, updaterAccessType, updaterUserId, userIdToUpdate) => {
+    let targetUserId;
+    if (updaterAccessType === 'admin' && userIdToUpdate !== undefined) {
+        targetUserId = userIdToUpdate;
+    } else if (updaterAccessType === 'user') {
+        targetUserId = updaterUserId;
+    } else {
+        throw new Error("Unauthorized to update requested_artist");
+    }
+
+    await db.promise().query(`UPDATE users SET requested_artist = ? WHERE id = ?`, [requested_artist, targetUserId]);
+};
+
+
+const updateUserAccessType = async (access_type, updaterAccessType, userIdToUpdate) => {
+    if (updaterAccessType !== 'admin') {
+        throw new Error("Only admin can change access_type");
+    }
+
+    await db.promise().query(`UPDATE users SET access_type = ? WHERE id = ?`, [access_type, userIdToUpdate]);
 };

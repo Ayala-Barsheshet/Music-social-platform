@@ -1,10 +1,7 @@
-
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import APIRequests from "../../services/APIRequests";
-import { useNavigate } from "react-router-dom";
-import "./SongSearch.css";
-
+import styles from "./SongSearch.module.css";
 
 const SongSearch = () => {
     const { playlistId } = useParams();
@@ -15,9 +12,9 @@ const SongSearch = () => {
     const [filteredSongs, setFilteredSongs] = useState([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [addedSongs, setAddedSongs] = useState([]);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
-
     const mode = playlistId ? "add-to-playlist" : "search";
 
     const searchTypes = {
@@ -27,7 +24,15 @@ const SongSearch = () => {
     };
 
     useEffect(() => {
-        APIRequests.getRequest("songs").then(setSongs);
+        const fetchSongs = async () => {
+            try {
+                const data = await APIRequests.getRequest("songs");
+                setSongs(data);
+            } catch (err) {
+                setError(err.message || "Failed to fetch songs");
+            }
+        };
+        fetchSongs();
     }, []);
 
     useEffect(() => {
@@ -41,9 +46,7 @@ const SongSearch = () => {
 
         switch (sortOption) {
             case "date":
-                filtered.sort(
-                    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-                );
+                filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 break;
             case "genre":
                 filtered.sort((a, b) => a.genre.localeCompare(b.genre));
@@ -56,11 +59,12 @@ const SongSearch = () => {
         setFilteredSongs(filtered);
     }, [songs, searchQuery, searchType, sortOption]);
 
-        useEffect(() => {
-        const f = (e) => !e.target.closest(".search-wrapper") && setDropdownOpen(false);
-        document.addEventListener("click", f);
-        return () => document.removeEventListener("click", f);
-    }, []); 
+    useEffect(() => {
+        const handleClickOutside = (e) =>
+            !e.target.closest(`.${styles.searchWrapper}`) && setDropdownOpen(false);
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
 
     const groupByAlbum = (songsList) => {
         const grouped = {};
@@ -71,20 +75,24 @@ const SongSearch = () => {
         return grouped;
     };
 
-
     const handleAddSongToPlaylist = async (songId) => {
         try {
             await APIRequests.postRequest(`playlist-songs/${playlistId}/songs/${songId}`);
             setAddedSongs((prev) => [...prev, songId]);
         } catch (err) {
-            console.error("Failed to add song to playlist", err);
+          setError(err.message || "Failed to fetch add song to playlist");
         }
     };
 
     return (
-        <div className="song-search-page">
-            <div className="search-controls">
-                <div className="search-wrapper">
+        <div className={styles.songSearchPage}>
+        {error && (
+            <div className={styles.errorMessage}>
+                {error}
+            </div>
+        )}
+            <div className={styles.searchControls}>
+                <div className={styles.searchWrapper}>
                     <input
                         type="text"
                         placeholder={`Search by ${searchTypes[searchType]}`}
@@ -93,14 +101,14 @@ const SongSearch = () => {
                     />
                     <button
                         type="button"
-                        className="search-dropdown-button"
+                        className={styles.searchDropdownButton}
                         onClick={() => setDropdownOpen((prev) => !prev)}
                     >
                         🔻
                     </button>
 
                     {dropdownOpen && (
-                        <div className="search-dropdown">
+                        <div className={styles.searchDropdown}>
                             {Object.entries(searchTypes).map(([key, label]) => (
                                 <div
                                     key={key}
@@ -119,7 +127,7 @@ const SongSearch = () => {
                 <select
                     value={sortOption}
                     onChange={(e) => setSortOption(e.target.value)}
-                    className="search-select"
+                    className={styles.searchSelect}
                 >
                     <option value="">Sort by</option>
                     <option value="date">Date</option>
@@ -127,33 +135,36 @@ const SongSearch = () => {
                     <option value="album">Album</option>
                 </select>
             </div>
+
             {mode === "add-to-playlist" && (
                 <button
-                    className="back-to-playlist-button"
+                    className={styles.backToPlaylistButton}
                     onClick={() => navigate(`/playlists-songs/${playlistId}`)}
                 >
                     ← Back to Playlist
                 </button>
             )}
-            <div className="songs-section">
+
+            <div className={styles.songsSection}>
                 {sortOption === "album" ? (
                     Object.entries(groupByAlbum(filteredSongs)).map(
                         ([albumName, songs]) => (
-                            <div key={albumName} className="songs-by-album">
-                                <h2 className="album-title">Album: {albumName}</h2>
-                                <div className="songs-container">
+                            <div key={albumName} className={styles.songsByAlbum}>
+                                <h2 className={styles.albumTitle}> '{albumName}' by {songs[0].artist_name}</h2>
+                                <div className={styles.songsContainer}>
                                     {songs.map((song) => (
                                         <div
                                             key={song.id}
                                             onClick={() => navigate(`/songs/${song.id}`)}
-                                            className="song-card"
+                                            className={styles.songCard}
                                         >
-                                            <p className="song-title">{song.name}</p>
-                                            <p className="song-artist">{song.artist_name}</p>
-                                            <p className="song-genre">{song.genre}</p>
+                                            <p className={styles.songTitle}>{song.name}</p>
+                                            <p className={styles.songArtist}>{song.artist_name}</p>
+                                            <p className={styles.songGenre}>{song.genre}</p>
                                             {mode === "add-to-playlist" && (
                                                 <button
-                                                    className={`add-button ${addedSongs.includes(song.id) ? "added" : ""}`}
+                                                    className={`${styles.addButton} ${addedSongs.includes(song.id) ? styles.added : ""
+                                                        }`}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         handleAddSongToPlaylist(song.id);
@@ -170,19 +181,20 @@ const SongSearch = () => {
                         )
                     )
                 ) : (
-                    <div className="songs-container">
+                    <div className={styles.songsContainer}>
                         {filteredSongs.map((song) => (
                             <div
                                 key={song.id}
                                 onClick={() => navigate(`/songs/${song.id}`)}
-                                className="song-card"
+                                className={styles.songCard}
                             >
-                                <p className="song-title">{song.name}</p>
-                                <p className="song-artist">{song.artist_name}</p>
-                                <p className="song-genre">{song.genre}</p>
+                                <p className={styles.songTitle}>{song.name}</p>
+                                <p className={styles.songArtist}>{song.artist_name}</p>
+                                <p className={styles.songGenre}>{song.genre}</p>
                                 {mode === "add-to-playlist" && (
                                     <button
-                                        className={`add-button ${addedSongs.includes(song.id) ? "added" : ""}`}
+                                        className={`${styles.addButton} ${addedSongs.includes(song.id) ? styles.added : ""
+                                            }`}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleAddSongToPlaylist(song.id);
@@ -202,4 +214,3 @@ const SongSearch = () => {
 };
 
 export default SongSearch;
-

@@ -1,0 +1,243 @@
+/* Navbar.module.css - עם איקונים לבנים וממורכזים */
+.navbar {
+  width: 240px;
+  background-color: #000000;
+  padding: 24px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  margin: 8px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+
+.logo {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 32px 0;
+  position: relative;
+  text-align: center; /* ממרכז את הלוגו */
+}
+
+.logo::before {
+  content: "●●●";
+  color: #1ed760;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 8px;
+  letter-spacing: -4px;
+  position: relative;
+  top: -2px;
+  transform: rotate(-15deg);
+  display: inline-block;
+}
+
+.navLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center; /* ממרכז את כל הלינקים */
+}
+
+.navLinks li {
+  margin: 0;
+  width: 100%; /* נותן רוחב מלא לכל אלמנט */
+}
+
+.navLinks a {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ממרכז את התוכן של הלינק */
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #b3b3b3;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.navLinks a:hover {
+  color: #ffffff;
+  background-color: #1a1a1a;
+}
+
+.navLinks a.active {
+  color: #ffffff;
+  background-color: #1a1a1a;
+}
+
+/* איקונים צבעוניים - שמירה על האיקונים המקוריים */
+.navLinks a[href="/"]::before,
+.navLinks a[href$="/"]:not([href*="/"]):not([href$="upload-song/"])::before {
+  content: "🏠";
+  font-size: 18px;
+  width: 20px;
+  display: inline-block;
+}
+
+.navLinks a[href="/my-library"]::before {
+  content: "📚";
+  font-size: 18px;
+  width: 20px;
+  display: inline-block;
+}
+
+.navLinks a[href="/search"]::before {
+  content: "🔍";
+  font-size: 18px;
+  width: 20px;
+  display: inline-block;
+}
+
+.navLinks a[href="/settings"]::before {
+  content: "⚙️";
+  font-size: 18px;
+  width: 20px;
+  display: inline-block;
+}
+
+.navLinks a[href="/upload-song"]::before {
+  content: "⬆️";
+  font-size: 18px;
+  width: 20px;
+  display: inline-block;
+}
+
+.navLinks a[href="/access-control"]::before {
+  content: "👥";
+  font-size: 18px;
+  width: 20px;
+  display: inline-block;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ממרכז את הכפתור */
+  gap: 16px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #b3b3b3;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.logoutButton::before {
+  content: "🚪";
+  font-size: 18px;
+  width: 20px;
+  display: inline-block;
+}
+
+.logoutButton:hover {
+  color: #ffffff;
+  background-color: #1a1a1a;
+}
+
+/* Special styling for library section */
+.navLinks a[href="/my-library"] {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #282828;
+  font-size: 16px;
+}
+
+/* Special styling for bottom section */
+.navLinks a[href="/settings"],
+.navLinks a[href="/upload-song"],
+.navLinks a[href="/access-control"] {
+  margin-top: 8px;
+}
+
+.navLinks a[href="/settings"] {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #282828;
+}
+
+/* הסרת אפקטי הובר על הטקסט - רק האיקונים ישתנו */
+.navLinks a::before:hover {
+  transform: scale(1.1); /* הגדלת האיקון קלה בהובר */
+  transition: transform 0.2s ease;
+}
+
+.logoutButton::before:hover {
+  transform: scale(1.1); /* הגדלת האיקון קלה בהובר */
+  transition: transform 0.2s ease;
+}
+
+/* Active state styling */
+.navLinks a.active {
+  background-color: #1a1a1a;
+  border-left: 3px solid #1ed760;
+}
+
+/* הסרת אנימציית ההחלקה על הטקסט */
+.navLinks a,
+.logoutButton {
+  transform: translateX(0);
+}
+
+/* רק האיקונים יקבלו אפקט הובר עדין */
+.navLinks a::before,
+.logoutButton::before {
+  transition: transform 0.2s ease;
+}
+
+.navLinks a:hover::before,
+.logoutButton:hover::before {
+  transform: scale(1.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar {
+    width: 200px;
+    padding: 16px;
+  }
+  
+  .navLinks a,
+  .logoutButton {
+    padding: 10px 12px;
+    font-size: 13px;
+    gap: 12px;
+  }
+  
+  .navLinks a::before,
+  .logoutButton::before {
+    font-size: 16px;
+    width: 18px;
+  }
+  
+  .logo {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+}
+
+/* Dark theme enhancements */
+.navbar {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  text-shadow: 0 2px 4px rgba(29, 215, 96, 0.3);
+}

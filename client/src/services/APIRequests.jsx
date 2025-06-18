@@ -5,102 +5,73 @@ const SERVER_URL = 'http://localhost:3000/';
 class APIRequests extends Component {
 
     static async getRequest(restUrl) {
-        try {
-            console.log(`Making GET request to: ${SERVER_URL}${restUrl}`);
+        console.log(`get request to ${SERVER_URL}${restUrl}`);
+    
+        const response = await fetch(`${SERVER_URL}${restUrl}`, {
+            method: 'GET',
+            headers: this.buildHeaders()
+        });
 
-            const response = await fetch(`${SERVER_URL}${restUrl}`, {
-                method: 'GET',
-                headers: this.buildHeaders(false)
-            });
-            console.log(`Response status: ${response.status}`);
+        const data = await response.json();
 
-
-            if (!response.ok) {
-                throw new Error(`GET HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            return data;
-
-        } catch (error) {
-            throw error; // throw the error to the client
+        if (!response.ok) {
+            const errorMessage = data?.error || 'An error occurred during the request';
+            throw new Error(errorMessage);
         }
 
+        return data;
     }
+
 
     static async postRequest(restUrl, objectToAdd) {
-        try {
-            console.log(`Making POST request to: ${SERVER_URL}${restUrl}`);
+        const response = await fetch(`${SERVER_URL}${restUrl}`, {
+            method: 'POST',
+            headers: this.buildHeaders(),
+            body: JSON.stringify(objectToAdd),
+        })
 
-            const response = await fetch(`${SERVER_URL}${restUrl}`, {
-                method: 'POST',
-                headers: this.buildHeaders(),
-                body: JSON.stringify(objectToAdd),
-            })
+        const data = await response.json();
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                const errorMessage = data?.error || 'An error occurred';
-                throw new Error(errorMessage);
-            }
-            return data;
-
-        } catch (error) {
-            throw error; // throw the error to the client
+        if (!response.ok) {
+            const errorMessage = data?.error || 'An error occurred during the request';
+            throw new Error(errorMessage);
         }
 
+        return data;
     }
+
 
     static async patchRequest(restUrl, fieldsToUpdate) {
-        try {
-            console.log(`Making POST request to: ${SERVER_URL}${restUrl}`);
+        const response = await fetch(`${SERVER_URL}${restUrl}`, {
+            method: 'PATCH',
+            headers: this.buildHeaders(),
+            body: JSON.stringify(fieldsToUpdate),
+        })
 
-            const response = await fetch(`${SERVER_URL}${restUrl}`, {
-                method: 'PATCH',
-                headers: this.buildHeaders(),
-                body: JSON.stringify(fieldsToUpdate),
-            })
+        const data = await response.json();
 
-            // const errorData = await response.json();
-            // if (!response.ok) {
-            //     const errorMessage = errorData?.error || 'Internal Server PATCH Error';
-            //     throw new Error(errorMessage);
-            // }
 
-            if (!response.ok) {
-                throw new Error(`PATCH HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            return data;
-
-        } catch (error) {
-            console.error('An error occurred:', error);
-            throw error; // throw the error to the client
+        if (!response.ok) {
+            const errorMessage = data?.error || 'An error occurred during the request';
+            throw new Error(errorMessage);
         }
 
+        return data;
+
     }
+
 
     static async deleteRequest(restUrl) {
-        try {
-            console.log(`Making DELETE request to: ${SERVER_URL}${restUrl}`);
+        const response = await fetch(`${SERVER_URL}${restUrl}`, {
+            method: 'DELETE',
+            headers: this.buildHeaders(false)
+        });
 
-            const response = await fetch(`${SERVER_URL}${restUrl}`, {
-                method: 'DELETE',
-                headers: this.buildHeaders(false)
-            });
-
-            if (!response.ok) {
-                throw new Error(`DELETE HTTP error! status: ${response.status}`);
-            }
-
-        } catch (error) {
-            console.error('An error occurred:', error);
-            throw error; // throw the error to the client
+        if (!response.ok) {
+            throw new Error(`DELETE HTTP error! status: ${response.status}`);
         }
-
     }
+
 
     static buildHeaders(contentType = true) {
         const token = sessionStorage.getItem("token");

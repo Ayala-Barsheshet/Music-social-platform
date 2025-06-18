@@ -1,14 +1,4 @@
-
 import db from '../DB/mysql.js';
-
-export const serviceGetAllComments = async () => {
-    const [rows] = await db.promise().query(`
-        SELECT c.*, u.username FROM comments c
-        JOIN users u ON c.user_id = u.id
-        ORDER BY c.created_at DESC
-    `);
-    return rows;
-};
 
 export const serviceGetCommentsBySongId = async (song_id) => {
     const [rows] = await db.promise().query(`
@@ -31,7 +21,6 @@ export const serviceAddComment = async (song_id, user_id, title, body) => {
 };
 
 export const serviceUpdateComment = async (id, user_id, fields) => {
-    console.log(`Checking if comment with ID ${id} belongs to user with ID ${user_id}`);
     const [existing] = await db.promise().query(`SELECT * FROM comments WHERE id = ? AND user_id = ?`, [id, user_id]);
     if (existing.length === 0) {
         throw new Error("You are not authorized to update this comment");
@@ -56,11 +45,8 @@ export const serviceUpdateComment = async (id, user_id, fields) => {
 
 export const serviceDeleteComment = async (id, user_id) => {
     const [check] = await db.promise().query(`SELECT * FROM comments WHERE id = ? AND user_id = ?`, [id, user_id]);
-    console.log(`Check result: ${JSON.stringify(check)}`);
-
     if (check.length === 0) {
         throw new Error("You are not authorized to delete this comment");
     }
-
     await db.promise().query(`DELETE FROM comments WHERE id = ?`, [id]);
 };

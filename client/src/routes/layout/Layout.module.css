@@ -1,8 +1,8 @@
-/* קונטיינר חיצוני */
-.layoutContainer {
+/* קונטיינר חיצוני
+/* .layoutContainer {
   display: flex;
-}
-
+  min-height: 100vh; /* גובה מינימלי של חלון הדפדפן */
+ 
 /* סיידבר קבוע */
 .sidebar {
   width: 240px;
@@ -10,14 +10,18 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(14, 14, 14, 0.8);
+  background-color: rgba(17, 16, 16, 0.356);
   z-index: 1000;
+  overflow: hidden; /* מונע גלילה בסיידבר */
 }
 
-/* תוכן עיקרי גולל רגיל */
+/* תוכן ראשי - מתוזז מימין לסיידבר */
 .mainContent {
-  margin-left: 240px; /* מפנה מקום לסיידבר */
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: white;
+  margin-left: 240px; /* שוליים שווים לרוחב הסיידבר */
+  padding: 20px; /* ריווח פנימי */
+  flex-grow: 1;
+  min-height: 100vh;
+  overflow-y: auto; /* גלילה בתוכן הראשי במידת הצורך */
+  box-sizing: border-box;
+  
 }

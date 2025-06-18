@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate} from "react-router-dom";
-
-import Login from "../pages/Auth/login/Login.jsx";
-import Register from "../pages/Auth/Register.jsx";
+import Login from "../pages/auth/authForms/Login.jsx";
+import Register from "../pages/auth/authForms/Register.jsx";
 import Home from "../pages/home/Home.jsx";
 import MyLibrary from "../pages/myLibrary/MyLibrary.jsx";
 import Playlist from "../pages/playlist/Playlist.jsx";
@@ -9,7 +8,7 @@ import SongSearch from "../pages/songSearch/SongSearch.jsx";
 import UploadSong from "../pages/uploadSong/UploadSong.jsx";
 import Settings from "../pages/settings/Settings.jsx";
 import Song from "../pages/song/Song.jsx";
-import AccessControl from "../pages/Auth/accessControl/AccessControl.jsx"; 
+import AccessControl from "../pages/auth/accessControl/AccessControl.jsx"; 
 
 const MainRoutes = ({ isAuthenticated }) => {
 

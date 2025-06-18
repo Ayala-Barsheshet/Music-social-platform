@@ -1,0 +1,240 @@
+/* .songSearchPage {
+  background: linear-gradient(135deg, #191414 0%, #1db954 100%);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: white;
+} */
+
+.songSearchPage {
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  max-width: calc(100vw - 280px); /* מגביל את הרוחב - 240px נאב בר + 40px מרווח */
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden; /* מונע גלילה אופקית */
+}
+
+.homeTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(45deg, #fff, #1db954);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.songsByAlbum {
+  margin-bottom: 4rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 100%; /* מגביל את הרוחב */
+  box-sizing: border-box;
+}
+
+.albumTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.songsContainer {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  scroll-behavior: smooth;
+  max-width: 100%; /* מגביל את הרוחב */
+  width: 100%;
+}
+
+.songsContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.songsContainer::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.songsContainer::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.6);
+  border-radius: 4px;
+}
+
+.songsContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 185, 84, 0.8);
+}
+
+.songCard {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  min-width: 280px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.songCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(29, 185, 84, 0.15));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.songCard:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(29, 185, 84, 0.3);
+  border-color: rgba(29, 185, 84, 0.5);
+  background: linear-gradient(145deg, #333333, #222222);
+}
+
+.songCard:hover::before {
+  opacity: 1;
+}
+
+.songCard:active {
+  transform: translateY(-5px) scale(1.01);
+}
+
+.songTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: #fff;
+  line-height: 1.3;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.songArtist {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+.songGenre {
+  font-size: 0.9rem;
+  color: #fff;
+  background: linear-gradient(45deg, #1db954, #1ed760);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.loadMoreBtn {
+  background: linear-gradient(45deg, #1db954, #1ed760);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.loadMoreBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(29, 185, 84, 0.5);
+  background: linear-gradient(45deg, #1ed760, #22c55e);
+}
+
+.loadMoreBtn:active {
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .songSearchPage {
+    padding: 1rem;
+    max-width: calc(100vw - 240px); /* מתאים לנאב בר קטן יותר */
+  }
+  
+  .homeTitle {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .songsContainer {
+    gap: 1rem;
+  }
+  
+  .songCard {
+    min-width: 250px;
+    padding: 1.2rem;
+  }
+  
+  .songsByAlbum {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .albumTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .songSearchPage {
+    max-width: calc(100vw - 220px); /* מתאים לנאב בר קטן עוד יותר */
+  }
+  
+  .homeTitle {
+    font-size: 1.5rem;
+  }
+  
+  .albumTitle {
+    font-size: 1.3rem;
+  }
+  
+  .songCard {
+    min-width: 220px;
+    padding: 1rem;
+  }
+  
+  .songTitle {
+    font-size: 1.1rem;
+  }
+  
+  .songArtist {
+    font-size: 1rem;
+  }
+}

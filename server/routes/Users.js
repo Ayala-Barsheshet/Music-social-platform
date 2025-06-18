@@ -13,6 +13,7 @@ router.post('/login', loginUser);
 router.post('/register', registerUser);
 
 router.use(auth);
+
 router.get('/requested-artist-access',getRequestedArtistAccess);
 router.patch('/', updateUserDetails);
 

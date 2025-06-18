@@ -7,6 +7,7 @@ import {
 } from '../controllers/Likes-loves.js';
 
 const router = express.Router();
+
 router.use(auth);
 
 router.get('/:songId', getLikeStatus);

@@ -3,9 +3,7 @@ import db from '../DB/mysql.js';
 export const serviceGetUserPlaylists = async (userId) => {
   const [rows] = await db.promise().query(
     `SELECT * FROM playlists WHERE user_id = ?`, [userId]
-  );
-  console.log("////////////s",rows);
-  
+  );  
   return rows;
 };
 

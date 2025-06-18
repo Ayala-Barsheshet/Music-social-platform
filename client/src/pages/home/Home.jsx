@@ -1,105 +1,17 @@
-
-
-// import React, { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import APIRequests from "../services/APIRequests";
-// import { useUser } from '../services/UserProvider';
-
-// // import "./SongSearch.css";
-
-// const Home = () => {
-
-//   const [recommendedSongs, setRecommendedSongs] = useState([]);
-//   const [recentSongs, setRecentSongs] = useState([]);
-//   const [recommendedOffset, setRecommendedOffset] = useState(0);
-//   const [recentOffset, setRecentOffset] = useState(0);
-//   const [hasMoreRecommended, setHasMoreRecommended] = useState(true);
-//   const [hasMoreRecent, setHasMoreRecent] = useState(true);
-
-//   const { user } = useUser();
-
-//   const navigate = useNavigate();
-//   const LIMIT = 5;
-
-//   useEffect(() => {
-//     loadMoreRecommended();
-//     loadMoreRecent();
-//   }, []);
-
-//   const loadMoreRecommended = async () => {
-//     const newSongs = await APIRequests.getRequest(`songs/recommended?limit=${LIMIT}&offset=${recommendedOffset}`);
-//     if (newSongs.length < LIMIT) {
-//       setHasMoreRecommended(false); // אין יותר שירים להציג
-//     }
-
-
-//     setRecommendedSongs(prev => [...prev, ...newSongs]);
-//     setRecommendedOffset(prev => prev + LIMIT);
-//   };
-
-//   const loadMoreRecent = async () => {
-//     const newSongs = await APIRequests.getRequest(`songs/recent?limit=${LIMIT}&offset=${recentOffset}`);
-//     console.log("New recent songs:", newSongs);
-//     if (newSongs.length < LIMIT) {
-//       setHasMoreRecent(false); // אין יותר שירים להציג
-//     }
-
-//     setRecentSongs(prev => [...prev, ...newSongs]);
-//     setRecentOffset(prev => prev + LIMIT);
-//   };
-
-//   const renderSongs = (songs) => (
-//     <div className="songs-container">
-//       {songs.map((song) => (
-//         <div
-//           key={song.id}
-//           onClick={() => navigate(`/songs/${song.id}`)}
-//           className="song-card"
-//         >
-//           <p className="song-title">{song.name}</p>
-//           <p className="song-artist">{song.artist_name}</p>
-//           <p className="song-genre">{song.genre}</p>
-//         </div>
-//       ))}
-//     </div>
-//   );
-
-//   return (
-//     <div className="song-search-page">
-//       <h1 className="home-title">Welcome {user.username} to spotify & share </h1>
-
-//       <div className="songs-by-album">
-//         <h2 className="album-title">🎧Most loved songs on Spotify</h2>
-//         {renderSongs(recommendedSongs)}
-//         {hasMoreRecommended && <button className="load-more-btn" onClick={loadMoreRecommended}>load more... </button>}
-//       </div>
-
-//       <div className="songs-by-album">
-//         <h2 className="album-title">🕒Recently uploaded songs</h2>
-//         {renderSongs(recentSongs)}
-//         {hasMoreRecent && <button className="load-more-btn" onClick={loadMoreRecent}>load more...</button>}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;
-
-
-
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import APIRequests from "../../services/APIRequests";
 import { useUser } from "../../services/UserProvider";
+import styles from "./Home.module.css"
 
 const Home = () => {
-  const [recommendedSongs, setRecommendedSongs] = useState([]);
+  const [mostLikedSongs, setMostLikedSongs] = useState([]);
   const [recentSongs, setRecentSongs] = useState([]);
-  const [recommendedOffset, setRecommendedOffset] = useState(0);
+  const [mostLikedOffset, setMostLikedOffset] = useState(0);
   const [recentOffset, setRecentOffset] = useState(0);
-  const [hasMoreRecommended, setHasMoreRecommended] = useState(true);
+  const [hasMoreMostLiked, setHasMoreMostLiked] = useState(true);
   const [hasMoreRecent, setHasMoreRecent] = useState(true);
+  const [message , setMessage] = useState(null)
 
   const { user } = useUser();
   const navigate = useNavigate();
@@ -109,11 +21,11 @@ const Home = () => {
 
   useEffect(() => {
     loadMoreSongs({
-      endpoint: "recommended",
-      offset: recommendedOffset,
-      setOffset: setRecommendedOffset,
-      songsSetter: setRecommendedSongs,
-      hasMoreSetter: setHasMoreRecommended,
+      endpoint: "most-liked",
+      offset: mostLikedOffset,
+      setOffset: setMostLikedOffset,
+      songsSetter: setMostLikedSongs,
+      hasMoreSetter: setHasMoreMostLiked,
     });
 
     loadMoreSongs({
@@ -132,54 +44,60 @@ const Home = () => {
     songsSetter,
     hasMoreSetter,
   }) => {
-    const newSongs = await APIRequests.getRequest(
+    try {
+      const newSongs = await APIRequests.getRequest(
       `songs/${endpoint}?limit=${FETCH_LIMIT}&offset=${offset}`
-    );
+      );
 
-    if (newSongs.length < FETCH_LIMIT) {
+      if (newSongs.length < FETCH_LIMIT) {
+      hasMoreSetter(false);
+      }
+
+      const songsToAdd = newSongs.slice(0, LIMIT);
+      songsSetter((prev) => [...prev, ...songsToAdd]);
+      setOffset((prev) => prev + LIMIT);
+    } catch (error) {
+      setMessage(error.message || "Failed to load songs");
       hasMoreSetter(false);
     }
-
-    const songsToAdd = newSongs.slice(0, LIMIT);
-    songsSetter((prev) => [...prev, ...songsToAdd]);
-    setOffset((prev) => prev + LIMIT);
   };
 
   const renderSongs = (songs) => (
-    <div className="songs-container">
+    <div className={styles.songsContainer}>
       {songs.map((song) => (
         <div
           key={song.id}
           onClick={() => navigate(`/songs/${song.id}`)}
-          className="song-card"
+          className={styles.songCard}
         >
-          <p className="song-title">{song.name}</p>
-          <p className="song-artist">{song.artist_name}</p>
-          <p className="song-genre">{song.genre}</p>
+          <p className={styles.songTitle}>{song.name}</p>
+          <p className={styles.songArtist}>{song.artist_name}</p>
+          <p className={styles.songGenre}>{song.genre}</p>
         </div>
       ))}
     </div>
   );
 
   return (
-    <div className="song-search-page">
-      <h1 className="home-title">
-        Welcome {user.username} to spotify & share
+    <div className={styles.songSearchPage}>
+      {message && <div className={styles.message}>{message}</div>}
+      <h1 className={styles.homeTitle}>
+        Welcome {user.username} to Spotify & Share
       </h1>
 
-      <div className="songs-by-album">
-        <h2 className="album-title">🎧Most loved songs on Spotify</h2>
-        {renderSongs(recommendedSongs)}
-        {hasMoreRecommended && (
+      <div className={styles.songsByAlbum}>
+        <h2 className={styles.albumTitle}>🎧Most liked songs on Spotify & Share</h2>
+        {renderSongs(mostLikedSongs)}
+        {hasMoreMostLiked && (
           <button
-            className="load-more-btn"
+            className={styles.loadMoreBtn}
             onClick={() =>
               loadMoreSongs({
-                endpoint: "recommended",
-                offset: recommendedOffset,
-                setOffset: setRecommendedOffset,
-                songsSetter: setRecommendedSongs,
-                hasMoreSetter: setHasMoreRecommended,
+                endpoint: "most-liked",
+                offset: mostLikedOffset,
+                setOffset: setMostLikedOffset,
+                songsSetter: setMostLikedSongs,
+                hasMoreSetter: setHasMoreMostLiked,
               })
             }
           >
@@ -188,12 +106,12 @@ const Home = () => {
         )}
       </div>
 
-      <div className="songs-by-album">
-        <h2 className="album-title">🕒Recently uploaded songs</h2>
+      <div className={styles.songsByAlbum}>
+        <h2 className={styles.albumTitle}>🕒Recently uploaded songs</h2>
         {renderSongs(recentSongs)}
         {hasMoreRecent && (
           <button
-            className="load-more-btn"
+            className={styles.loadMoreBtn}
             onClick={() =>
               loadMoreSongs({
                 endpoint: "recent",

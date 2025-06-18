@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import APIRequests from '../../services/APIRequests.jsx';
-import { useUser } from '../../services/UserProvider';
+import { useUser } from '../../services/UserProvider.jsx';
 import styles from './Comments.module.css';
 
 const Comments = ({ songId }) => {
@@ -9,7 +9,7 @@ const Comments = ({ songId }) => {
   const [editFields, setEditFields] = useState({ title: '', body: '' });
   const [newCommentFields, setNewCommentFields] = useState({ title: '', body: '' });
   const [isAddingComment, setIsAddingComment] = useState(false);
-
+  const [error, setError] = useState(null)
   const { user } = useUser();
 
   useEffect(() => {
@@ -21,7 +21,8 @@ const Comments = ({ songId }) => {
       const res = await APIRequests.getRequest(`comments/song/${songId}`);
       setComments(res);
     } catch (err) {
-      console.error('Error loading comments:', err);
+      setError(err.message || "Error updating comment");
+
     }
   };
 
@@ -31,7 +32,7 @@ const Comments = ({ songId }) => {
       await APIRequests.deleteRequest(`comments/${id}`);
       fetchComments();
     } catch (err) {
-      console.error("Error deleting comment:", err);
+      setError(err.message || "Error updating comment");
     }
   };
 
@@ -46,7 +47,7 @@ const Comments = ({ songId }) => {
       setEditingCommentId(null);
       fetchComments();
     } catch (err) {
-      console.error("Error updating comment:", err);
+      setError(err.message || "Error updating comment");
     }
   };
 
@@ -65,14 +66,17 @@ const Comments = ({ songId }) => {
       setIsAddingComment(false);
       fetchComments();
     } catch (err) {
-      console.error("Error submitting comment:", err);
+      setError(err.message || "Error updating comment");
     }
   };
 
   return (
     <div className={styles.commentsContainer}>
-      <h2>Comments</h2>
 
+      <h2>Comments</h2>
+      {error && (
+        <div className={styles.errorMsg}>{error}</div>
+      )}
       {!isAddingComment ? (
         <button className={styles.newCommentBtn} onClick={() => setIsAddingComment(true)}>
           ➕ New Comment

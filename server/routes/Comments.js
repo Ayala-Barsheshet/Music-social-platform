@@ -1,7 +1,6 @@
 import express from 'express';
 import auth from '../auth/authMiddleware.js';
 import {
-    getAllComments,
     getCommentsBySongId,
     addComment,
     updateComment,
@@ -12,7 +11,6 @@ const router = express.Router();
 
 router.use(auth);
 
-router.get('/', getAllComments);
 router.get('/song/:songId', getCommentsBySongId);
 router.post('/', addComment);
 router.patch('/:id', updateComment);

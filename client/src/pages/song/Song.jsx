@@ -1,8 +1,7 @@
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import APIRequests from "../../services/APIRequests.jsx";
-// import styles from "./Song.css";
+import styles from "./Song.module.css";
 import Comments from "../../comp/comments/comments.jsx";
 
 const Song = () => {
@@ -13,6 +12,9 @@ const Song = () => {
   const [hasLikeRow, setHasLikeRow] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [songError, setSongError] = useState(null);
+  const [likesError, setLikesError] = useState(null);
+  const [actionError, setActionError] = useState(null);
 
   useEffect(() => {
     fetchSong();
@@ -23,8 +25,9 @@ const Song = () => {
     try {
       const res = await APIRequests.getRequest(`songs/${songId}`);
       setSong(res);
+      setSongError(null);
     } catch (err) {
-      console.error("Failed to fetch song:", err);
+      setSongError(err.message || "Error loading the song.");
     }
   };
 
@@ -35,8 +38,7 @@ const Song = () => {
         setHasLikeRow(false);
         setLiked(false);
         setLoved(false);
-      }
-      else {
+      } else {
         setLiked(res.liked);
         setLoved(res.loved);
         setHasLikeRow(true);
@@ -44,8 +46,9 @@ const Song = () => {
       if (res.likeCount !== undefined) {
         setLikeCount(res.likeCount);
       }
+      setLikesError(null);
     } catch (err) {
-      console.warn("No like row found, not liked/loved yet.");
+      setLikesError(err.message || "Error loading likes.");
     }
   };
 
@@ -61,41 +64,45 @@ const Song = () => {
         field,
         value: newValue,
       });
-      console.log(res.likeCount);
 
       if (field === "liked" && res.likeCount !== undefined) {
         setLikeCount(res.likeCount);
       }
+      
+      setActionError(null);
     } catch (err) {
-      console.error(`Failed to update ${field}:`, err);
       stateSetter(!newValue);
+      setActionError(err.message || `Error updating ${field}`);
     }
   };
 
-
-  if (!song) return <div>Loading...</div>;
+  if (!song) return <div className={styles.loading}>Loading...</div>;
 
   return (
-    <div className="single-song-page">
-      <video controls className="my-video">
+    <div className={styles.singleSongPage}>
+      {songError && <div className={styles.error}>{songError}</div>}
+      {likesError && <div className={styles.error}>{likesError}</div>}
+      {actionError && <div className={styles.error}>{actionError}</div>}
+
+      <video controls className={styles.myVideo}>
         <source src={song.file_path} type="video/mp4" />
-        הדפדפן שלך לא תומך בוידאו.
+        Your browser does not support video.
       </video>
 
-      <div className="song-actions">
-        <div className="icon like" onClick={() => handleAction("liked", setLiked, liked)} title="Like">
-          {liked ? "👍" : "👍🏻"} <span className="like-count">{likeCount}</span>
+      <div className={styles.songActions}>
+        <div className={`${styles.icon} ${styles.like}`} onClick={() => handleAction("liked", setLiked, liked)} title="Like">
+          {liked ? "👍" : "👍🏻"} <span className={styles.likeCount}>{likeCount}</span>
         </div>
-        <div className="icon love" onClick={() => handleAction("loved", setLoved, loved)} title="Add to favorites">
+        <div className={`${styles.icon} ${styles.love}`} onClick={() => handleAction("loved", setLoved, loved)} title="Add to favorites">
           {loved ? "❤️" : "🤍"}
         </div>
       </div>
 
-      <div className="song-info">
-        <div className="name-artist">
+      <div className={styles.songInfo}>
+        <div className={styles.nameArtist}>
           {song.name} | {song.artist_name}
         </div>
-        <div className="created-at">
+        <div className={styles.createdAt}>
           {new Date(song.created_at).toLocaleDateString("he-IL", {
             year: "numeric",
             month: "long",
@@ -105,11 +112,11 @@ const Song = () => {
       </div>
 
       {song.lyrics && (
-        <div className="lyrics-section">
-          <button onClick={() => setShowLyrics((prev) => !prev)}>
+        <div className={styles.lyricsSection}>
+          <button className={styles.lyricsBtn} onClick={() => setShowLyrics((prev) => !prev)}>
             {showLyrics ? "Hide lyrics" : "Show lyrics"}
           </button>
-          {showLyrics && <pre className="lyrics">{song.lyrics}</pre>}
+          {showLyrics && <pre className={styles.lyrics}>{song.lyrics}</pre>}
         </div>
       )}
 
@@ -119,4 +126,3 @@ const Song = () => {
 };
 
 export default Song;
-

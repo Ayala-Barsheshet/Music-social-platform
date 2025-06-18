@@ -1,23 +1,21 @@
 import {
-    serviceGetAllSongs,
+    serviceGetMostLikedSongs,
+    serviceGetRecentSongs,
+    serviceGetUserFavoriteSongs,
+    serviceGetUnApprovedSongs,
+    serviceGetApprovedSongs,
     serviceGetSongById,
     serviceAddSong,
     serviceUpdateSong,
-    serviceDeleteSong,
-    serviceGetRecommendedSongs,
-    serviceGetRecentSongs,
-    serviceGetUserfavoriteSongs
+    serviceDeleteSong
 } from '../service/Songs.js';
 
 
-export const getRecommendedSongs = async (req, res) => {
+export const getMostLikedSongs = async (req, res) => {
     try {
-        console.log('Fetching recommended songs...');
         const limit = parseInt(req.query.limit) || 5;
         const offset = parseInt(req.query.offset) || 0;
-        console.log(`Fetching recommended songs with limit: ${limit}, offset: ${offset}`);
-
-        const songs = await serviceGetRecommendedSongs(limit, offset);
+        const songs = await serviceGetMostLikedSongs(limit, offset);
         res.status(200).json(songs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -28,7 +26,6 @@ export const getRecentSongs = async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 5;
         const offset = parseInt(req.query.offset) || 0;
-        console.log(`Fetching recommended songs with limit: ${limit}, offset: ${offset}`);
         const songs = await serviceGetRecentSongs(limit, offset);
         res.status(200).json(songs);
     } catch (error) {
@@ -36,10 +33,10 @@ export const getRecentSongs = async (req, res) => {
     }
 };
 
-export const getUserfavoriteSongs = async (req, res) => {
+export const getUserFavoriteSongs = async (req, res) => {
     try {
         const userId = req.user.id;
-        const songs = await serviceGetUserfavoriteSongs(userId);
+        const songs = await serviceGetUserFavoriteSongs(userId);
         res.status(200).json(songs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -48,11 +45,11 @@ export const getUserfavoriteSongs = async (req, res) => {
 
 export const getUnapprovedSongs = async (req, res) => {
     try {
-        const accessType = req.user.accessType;
+        const { accessType } = req.user;
         if (accessType !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
         }
-        const songs = await serviceGetAllSongs('unapproved');
+        const songs = await serviceGetUnApprovedSongs();
         res.status(200).json(songs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -61,14 +58,9 @@ export const getUnapprovedSongs = async (req, res) => {
 
 export const getAllSongs = async (req, res) => {
     try {
-        console.log('Fetching all songs...');
-        console.log(`User ID: ${req.user.id}`);  // Log the user ID for debugging
-        console.log(`User Access Type: ${req.user.accessType}`);  // Log the access type for debugging  
-
-
-        const accessType = req.user.accessType;  //access type from the request, got it from the token
+        const { accessType } = req.user;
         console.log(`Access type: ${accessType}`);
-        const Songs = await serviceGetAllSongs("approved");
+        const Songs = await serviceGetApprovedSongs();
         res.status(200).json(Songs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -77,7 +69,7 @@ export const getAllSongs = async (req, res) => {
 
 export const getSongById = async (req, res) => {
     try {
-        const accessType = req.user.accessType;  //access type from the request, got it from the token
+        const { accessType } = req.user;
         const { id } = req.params;
         const Song = await serviceGetSongById(id, accessType);
         if (!Song) {
@@ -91,10 +83,10 @@ export const getSongById = async (req, res) => {
 
 export const addSong = async (req, res) => {
     try {
-        const accessType = req.user.accessType;
-        const userId = req.user.id;  //access type from the request, got it from the token
-      console.log(`Adding song with access type: ${accessType}`);
-      
+        const { accessType } = req.user;
+        const userId = req.user.id;
+        console.log(`Adding song with access type: ${accessType}`);
+
         if (accessType !== 'admin' && accessType !== 'artist') {
             return res.status(403).json({ message: 'Access denied' });
         }
@@ -116,7 +108,7 @@ export const addSong = async (req, res) => {
 
 export const updateSong = async (req, res) => {
     try {
-        const accessType = req.user.accessType;  //access type from the request, got it from the token
+        const { accessType } = req.user;
         if (accessType !== 'admin' && accessType !== 'artist') {
             return res.status(403).json({ message: 'Access denied' });
         }
@@ -134,11 +126,10 @@ export const updateSong = async (req, res) => {
 
 export const deleteSong = async (req, res) => {
     try {
-        const accessType = req.user.accessType;  //access type from the request, got it from the token
+        const { accessType } = req.user;
         if (accessType !== 'admin' && accessType !== 'artist') {
             return res.status(403).json({ message: 'Access denied' });
         }
-        //גישה כמו בפטש בול
         const { id } = req.params;
         await serviceDeleteSong(id);
         res.status(204).send();

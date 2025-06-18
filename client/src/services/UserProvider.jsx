@@ -4,14 +4,15 @@ const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = JSON.parse(sessionStorage.getItem('currentUser'));
     if (storedUser) {
       setUser(storedUser);
     }
-    console.log('UserProvider mounted, current user:', storedUser);
-    
+    setIsLoading(false);
+
   }, []);
 
   const logout = () => {
@@ -21,7 +22,7 @@ export function UserProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout }}>
+    <UserContext.Provider value={{ user, setUser, logout, isLoading }}>
       {children}
     </UserContext.Provider>
   );

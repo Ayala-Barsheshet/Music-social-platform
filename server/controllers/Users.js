@@ -32,7 +32,7 @@ export const loginUser = async (req, res) => {
         });
 
     } catch (error) {
-        if (error.message === 'Invalid username or password') {//an error from server
+        if (error.message === 'Invalid username or password') {
             return res.status(401).json({ error: error.message });
         }
         res.status(500).json({ error: error.message });
@@ -62,19 +62,24 @@ export const registerUser = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        const status = error.statusCode || 500;
+        res.status(status).json({ error: 'Registration failed. Please try again.' });
     }
 };
 
 export const getRequestedArtistAccess = async (req, res) => {
     try {
-        const accessType = req.user.accessType;
-        if (accessType !== 'admin') {
+        const { accessType } = req.user;
+
+        if (accessType !== 'admin')
             return res.status(403).json({ error: 'Unauthorized: Admin access required' });
-        }
-        const requestedArtists = await serviceGetRequestedArtistAccess();
-        res.status(200).json(requestedArtists);
+
+        const requestedArtistAccess = await serviceGetRequestedArtistAccess();
+
+        res.status(200).json(requestedArtistAccess);
+
     } catch (error) {
+
         res.status(500).json({ error: error.message });
     }
 };
@@ -83,20 +88,29 @@ export const updateUserDetails = async (req, res) => {
     try {
         const updaterUserId = req.user.id;
         const updaterAccessType = req.user.accessType;
-        const formData = { ...req.body, updaterUserId, updaterAccessType };
-        const newUser = await serviceUpdateUserDetails(formData);
+        const formData = req.body;
 
-        let token = null;
-        if (newUser.accessTypeUpdated) {
-            token = createToken(newUser); // If accessType was updated, create a new token
+        const dataForService = { ...formData, updaterUserId, updaterAccessType };
+
+        const updatedUser = await serviceUpdateUserDetails(dataForService);
+
+        res.status(200).json(
+            {
+                username: updatedUser.username,
+                id: updatedUser.id,
+                accessType: updatedUser.access_type
+            }
+        );
+
+    } catch (error) {
+
+        if (
+            error.message === "Only admin can change access_type" ||
+            error.message === "Unauthorized to update requested_artist"
+        ) {
+            return res.status(403).json({ error: error.message });
         }
 
-        const response = { user: newUser };
-        if (token) response.token = token;
-        console.log("in controller:::response.user", response.user, "response.token", response.token);
-
-        res.status(201).json(response);
-    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };

@@ -8,31 +8,31 @@ const Playlist = () => {
   const [songs, setSongs] = useState([]);
   const [playlistInfo, setPlaylistInfo] = useState({ name: '', description: '' });
   const navigate = useNavigate();
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchPlaylistData = async () => {
       try {
         const res = await APIRequests.getRequest(`playlist-songs/${playlistId}`);
-        if (res.length > 0) {
-          setPlaylistInfo({
-            name: res[0].playlist_name || 'Playlist',
-            description: res[0].playlist_description || ''
-          });
 
-          const songsOnly = res.map(({ id, name, artist_name, genre }) => ({
-            id,
-            name,
-            artist_name,
-            genre
-          }));
+        setPlaylistInfo({
+          name: res[0].playlist_name || 'Playlist',
+          description: res[0].playlist_description || ''
+        });
 
-          setSongs(songsOnly);
-        } else {
-          setPlaylistInfo({ name: 'Playlist', description: '' });
-          setSongs([]);
-        }
+        const filteredSongs = res.filter((row) => row.id !== null);//real songs
+
+        const formattedSongs = filteredSongs.map((song) => ({
+          id: song.id,
+          name: song.name,
+          artist_name: song.artist_name,
+          genre: song.genre
+        }));
+
+        setSongs(formattedSongs);
+        
       } catch (err) {
-        console.error('Error fetching songs:', err);
+        setError(err.message || 'An error occurred while loading the songs');
       }
     };
 
@@ -48,7 +48,7 @@ const Playlist = () => {
       await APIRequests.deleteRequest(`playlist-songs/${playlistId}/songs/${songId}`);
       setSongs((prevSongs) => prevSongs.filter(song => song.id !== songId));
     } catch (err) {
-      console.error('Error removing song:', err);
+      setError(err.message || 'An error occurred while removing the song');
     }
   };
 
@@ -58,6 +58,7 @@ const Playlist = () => {
 
   return (
     <div className={styles.container}>
+      {error && <div className={styles.error}>{error}</div>}
       <h1 className={styles.playlistName}>{playlistInfo.name}</h1>
       <p className={styles.playlistDescription}>{playlistInfo.description}</p>
 

@@ -1,0 +1,161 @@
+/* SongSearch.module.css */
+
+.songSearchPage {
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  position: relative; /* Added from original .song-search-page */
+  padding-top: 60px; /* Added from original .song-search-page */
+}
+
+.searchControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.searchWrapper {
+  position: relative;
+  display: inline-block;
+  min-width: 300px;
+}
+
+.searchWrapper input {
+  border: none;
+  padding: 8px 12px;
+  flex: 1;
+  outline: none;
+}
+
+.searchDropdownButton {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-left: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.searchDropdown {
+  position: absolute;
+  top: calc(100% + 4px); /* Combined from two .search-dropdown rules */
+  left: 0; /* Combined from two .search-dropdown rules */
+  right: 0; /* Combined from two .search-dropdown rules */
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  z-index: 999; /* Adjusted z-index to 999 based on your second .search-dropdown definition */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  width: 150px; /* Added from the second .search-dropdown rule */
+}
+
+.searchDropdown div {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.searchDropdown div:hover {
+  background-color: #f0f0f0;
+}
+
+.searchSelect {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 180px;
+}
+
+.songGrid { /* This class was defined but not used in your JSX */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.songsContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.songCard {
+  background: #fff;
+  padding: 12px; /* Changed from 10px to 12px to match initial definition */
+  border-radius: 10px; /* Changed from 12px to 10px to match initial definition */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  position: relative; /* Added from original .song-card */
+  margin: 10px; /* Added from original .song-card */
+  border: 1px solid #ddd; /* Added from original .song-card */
+  background-color: #f9f9f9; /* Added from original .song-card */
+}
+
+.songCard:hover {
+  background: #f7f7f7;
+}
+
+.albumGroup { /* This class was defined but not used in your JSX */
+  margin-bottom: 32px;
+}
+
+.albumTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.albumSongs { /* This class was defined but not used in your JSX */
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.addButton {
+  background: none; /* Combined from multiple .add-button rules */
+  border: none; /* Combined from multiple .add-button rules */
+  color: #2ecc71; /* Combined from multiple .add-button rules */
+  font-size: 1.2rem; /* Adjusted to 1.2rem from initial 18px and then 1.2rem */
+  cursor: pointer;
+  padding: 2px 6px; /* Adjusted to 2px 6px from initial 4px */
+  transition: color 0.2s ease;
+  /* Original position styles from first .add-button are removed as per your desired output from previous prompt */
+}
+
+.addButton:hover {
+  color: #27ae60;
+}
+
+.addButton:focus {
+  outline: none;
+  box-shadow: none; /* Added from third .add-button rule */
+}
+
+.addButton:active {
+  transform: scale(0.95);
+}
+
+.addButton.added {
+  color: #2ecc71;
+  cursor: default;
+}
+
+.backToPlaylistButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #2ecc71;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 8px;
+}
+
+.backToPlaylistButton:hover {
+  color: #27ae60;
+}

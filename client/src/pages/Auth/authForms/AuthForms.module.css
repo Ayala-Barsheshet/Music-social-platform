@@ -1,45 +1,34 @@
-/* Login Form Container */
 body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(rgba(18, 18, 18, 0.85), rgba(18, 18, 18, 0.116)),
-              url(../../../../Leonardo_Phoenix_09_A_neutral_social_media_background_that_mim_1.jpg);
+  min-height: 100vh;
+}
+
+html {
+  background: linear-gradient(rgba(18, 18, 18, 0.0005), rgba(18, 18, 18, 0.01)),
+    url(../../../../Leonardo_Phoenix_09_A_neutral_social_media_background_that_mim_1.jpg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  margin: 0;
-  padding: 0;
 }
 
-/* 
-#container {
-  background-color: rgba(255, 255, 255, 0.726);
+
+.container {
+  background-color: transparent;
+  /* שקיפות מלאה */
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 35px;
   border-radius: 10px;
-  box-shadow: 0 0 30px rgb(8, 7, 16);
+  box-shadow: none;
+  /* ללא צל */
   text-align: center;
-} */
- 
- .container {
-  background-color: rgba(255, 255, 255, 0.037); /* כהה מאוד עם שקיפות */
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding: 35px;
-  border-radius: 10px;
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-  text-align: center;
-  backdrop-filter: blur(10px); /* יוצר תחושת עומק מודרנית */
-  max-width: 400px;
-  width: 90%;
+  backdrop-filter: none;
+  /* ביטול טשטוש */
 }
-
 
 /* Login Form Title */
 h3 {
@@ -121,33 +110,15 @@ a:hover {
   text-align: center;
 }
 
-/* .pageBackground {
-  background-image: url(/src/Leonardo_Phoenix_09_A_soft_neutral_background_for_a_social_med_2.jpg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.726);
-  margin: 0;
-  padding: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-} */
 .pageBackground {
-  background-image: url(/src/Leonardo_Phoenix_09_A_soft_neutral_background_for_a_social_med_2.jpg);
-  background-color: #00000024; /* צבע רקע שחור כמו ספוטיפיי */
+  background: transparent;
+  /* רקע שקוף לגמרי */
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
   padding: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 
 .title {
@@ -211,18 +182,3 @@ a:hover {
   margin: 10px 0;
   color: #333;
 }
-.pageBackground {
-  background-image: url(/src/Leonardo_Phoenix_09_A_soft_neutral_background_for_a_social_med_2.jpg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.726);
-  margin: 0;
-  padding: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-

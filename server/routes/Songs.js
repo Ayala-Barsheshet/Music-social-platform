@@ -1,12 +1,12 @@
 import express from 'express';
 import auth from '../auth/authMiddleware.js';
 import {
+  getMostLikedSongs,
+  getRecentSongs,
+  getUserFavoriteSongs,
+  getUnapprovedSongs,
   getAllSongs,
   getSongById,
-  getRecommendedSongs,
-  getRecentSongs,
-  getUserfavoriteSongs,
-  getUnapprovedSongs,
   addSong,
   updateSong,
   deleteSong
@@ -14,10 +14,11 @@ import {
 
 const router = express.Router();
 
-router.use(auth); //every rout below this code will pass first in auth before executing the controller
-router.get('/recommended', getRecommendedSongs);
+router.use(auth); 
+
+router.get('/most-liked', getMostLikedSongs);
 router.get('/recent', getRecentSongs);
-router.get('/user-favorites', getUserfavoriteSongs);
+router.get('/user-favorites', getUserFavoriteSongs);
 router.get('/unapproved', getUnapprovedSongs);
 
 router.get('/', getAllSongs);
