@@ -32,10 +32,6 @@ const UploadSong = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // const handleAlbumChange = e => {
-  //   const selected = albums.find(album => album.name === e.target.value);
-  //   setForm({ ...form, album_id: selected?.id || '' });
-  // };
   const handleAlbumChange = e => {
     setForm({ ...form, album_id: e.target.value === 'null' ? null : Number(e.target.value) });
   };

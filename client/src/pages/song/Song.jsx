@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import APIRequests from "../../services/APIRequests.jsx";
 import styles from "./Song.module.css";
-import Comments from "../../comp/comments/comments.jsx";
+import Comments from "../../comp/comments/Comments.jsx";
 
 const Song = () => {
   const { songId } = useParams();
@@ -86,7 +86,7 @@ const Song = () => {
 
       <video controls className={styles.myVideo}>
         <source src={`http://localhost:3000${song.file_path}`} type="video/mp4" />
-        Your browser does not support video.
+        Your browser does not support the video tag.
       </video>
 
       <div className={styles.songInfo}>
@@ -95,7 +95,7 @@ const Song = () => {
             {song.name} | {song.artist_name}
           </div>
           <div className={styles.createdAt}>
-            {new Date(song.created_at).toLocaleDateString("he-IL", {
+            {new Date(song.created_at).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",

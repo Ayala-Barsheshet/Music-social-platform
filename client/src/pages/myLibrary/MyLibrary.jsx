@@ -7,7 +7,7 @@ const MyLibrary = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>My Library</h1>
-      <p className={styles.subtitle}>Here you can find your saved music and playlists.</p>
+      <p className={styles.subtitle}>Here you can find your loved music and playlists.</p>
 
       <div className={styles.content}>
         <div className={styles.leftPanel}>

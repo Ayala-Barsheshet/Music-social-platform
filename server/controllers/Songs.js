@@ -59,7 +59,6 @@ export const getUnapprovedSongs = async (req, res) => {
 export const getAllSongs = async (req, res) => {
     try {
         const { accessType } = req.user;
-        console.log(`Access type: ${accessType}`);
         const Songs = await serviceGetApprovedSongs();
         res.status(200).json(Songs);
     } catch (error) {
@@ -85,7 +84,6 @@ export const addSong = async (req, res) => {
     try {
         const { accessType } = req.user;
         const userId = req.user.id;
-        console.log(`Adding song with access type: ${accessType}`);
 
         if (accessType !== 'admin' && accessType !== 'artist') {
             return res.status(403).json({ message: 'Access denied' });

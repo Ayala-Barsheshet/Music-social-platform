@@ -4,9 +4,7 @@ const SERVER_URL = 'http://localhost:3000/';
 
 class APIRequests extends Component {
 
-    static async getRequest(restUrl) {
-        console.log(`get request to ${SERVER_URL}${restUrl}`);
-    
+    static async getRequest(restUrl) {    
         const response = await fetch(`${SERVER_URL}${restUrl}`, {
             method: 'GET',
             headers: this.buildHeaders()

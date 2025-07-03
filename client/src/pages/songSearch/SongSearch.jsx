@@ -66,6 +66,9 @@ const SongSearch = () => {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
+
+    
+
     const groupByAlbum = (songsList) => {
         const grouped = {};
         songsList.forEach((song) => {

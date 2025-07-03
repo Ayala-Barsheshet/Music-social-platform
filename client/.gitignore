@@ -22,3 +22,50 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+
+
+# Exclude uploaded files folder
+server/cloud_storage_simulation/
+
+# Ignore all audio files
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.m4a
+*.wma
+*.aiff
+*.alac
+
+# Ignore music folders (common)
+songs/
+tracks/
+audio/
+music/
+
+# Optional: Ignore large files in general (>100MB), using Git LFS is preferred for big media
+# This line doesn't restrict by size directly, but you can use Git LFS instead if needed.
+
+# Ignore OS/system files
+.DS_Store
+Thumbs.db
+
+# Ignore build/temp files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# If using Node
+node_modules/
+
+# If using Visual Studio / C#
+bin/
+obj/
+
+# If using Python
+__pycache__/
+*.pyc

@@ -25,6 +25,7 @@
   margin-bottom: 3rem;
   align-items: center;
   justify-content: center;
+  position: relative; /* הוספתי זה */
 }
 
 .searchWrapper {
@@ -34,15 +35,16 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
-  overflow: hidden;
+  overflow: visible; /* שינוי מ-hidden ל-visible */
   min-width: 350px;
   transition: all 0.3s ease;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 10; /* הוספתי z-index גבוה */
 }
 
 .searchWrapper:focus-within {
   border-color: rgba(29, 185, 84, 0.5);
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
     0 0 20px rgba(29, 185, 84, 0.3);
 }
@@ -69,11 +71,10 @@
   color: white;
   transition: all 0.3s ease;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
-  /* Prevent button from shrinking or moving down in flex */
   align-self: flex-start;
-  /* Prevent vertical movement */
   position: relative;
   top: 0;
+  z-index: 11; /* הוספתי z-index גבוה יותר */
 }
 
 .searchDropdownButton:hover {
@@ -84,14 +85,15 @@
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95); /* הגברתי את האטימות */
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3); /* הגדלתי את העובי */
   border-radius: 16px;
-  z-index: 1000;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  z-index: 9999; /* הגדלתי משמעותית את ה-z-index */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); /* הגברתי את הצל */
   overflow: hidden;
   width: 200px;
+  min-width: 200px; /* הוספתי min-width */
 }
 
 .searchDropdown div {
@@ -100,6 +102,7 @@
   color: white;
   transition: all 0.3s ease;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5); /* הוספתי רקע */
 }
 
 .searchDropdown div:last-child {
@@ -107,7 +110,7 @@
 }
 
 .searchDropdown div:hover {
-  background: rgba(29, 185, 84, 0.2);
+  background: rgba(29, 185, 84, 0.3); /* הגברתי את האטימות */
   color: #1db954;
 }
 
@@ -128,7 +131,7 @@
 .searchSelect:focus {
   outline: none;
   border-color: rgba(29, 185, 84, 0.5);
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
     0 0 20px rgba(29, 185, 84, 0.3);
 }
@@ -230,7 +233,7 @@
   transform: translateY(-8px) scale(1.02);
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(29, 185, 84, 0.3);
-  box-shadow: 
+  box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.4),
     0 0 30px rgba(29, 185, 84, 0.2);
 }
@@ -324,32 +327,32 @@
   .songSearchPage {
     padding: 1rem;
   }
-  
+ 
   .searchControls {
     flex-direction: column;
     gap: 1rem;
   }
-  
+ 
   .searchWrapper {
     min-width: 100%;
   }
-  
+ 
   .searchSelect {
     width: 100%;
   }
-  
+ 
   .songsContainer {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
   }
-  
+ 
   .backToPlaylistButton {
     position: static;
     margin-bottom: 2rem;
     display: block;
     text-align: center;
   }
-  
+ 
   .albumTitle {
     font-size: 1.5rem;
   }
@@ -359,11 +362,11 @@
   .songsContainer {
     grid-template-columns: 1fr;
   }
-  
+ 
   .songCard {
     padding: 1.5rem;
   }
-  
+ 
   .albumTitle {
     font-size: 1.2rem;
   }

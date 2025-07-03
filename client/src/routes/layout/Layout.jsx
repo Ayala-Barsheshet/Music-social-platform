@@ -6,12 +6,11 @@ import MainRoutes from "../MainRoutes.jsx";
 import styles from "./Layout.module.css"; 
 
 const Layout = () => {
- const { user, isLoading } = useUser();
+  const { user, isLoading } = useUser();
 
   if (isLoading) return <div>Loading...</div>
 
   const isAuthenticated = !!user;
-
 
   return (
     <div className={styles.layoutContainer}>
@@ -20,7 +19,7 @@ const Layout = () => {
           <Navbar />
         </aside>
       )}
-      <main className={styles.mainContent}>
+      <main className={`${styles.mainContent} ${isAuthenticated ? styles.mainContentWithSidebar : ''}`}>
         <MainRoutes isAuthenticated={isAuthenticated} />
       </main>
     </div>

@@ -27,7 +27,6 @@ const Comments = ({ songId }) => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) return;
     try {
       await APIRequests.deleteRequest(`comments/${id}`);
       fetchComments();

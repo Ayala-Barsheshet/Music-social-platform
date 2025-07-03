@@ -20,7 +20,7 @@ const Playlist = () => {
           description: res[0].playlist_description || ''
         });
 
-        const filteredSongs = res.filter((row) => row.id !== null);//real songs
+        const filteredSongs = res.filter((row) => row.id !== null);
 
         const formattedSongs = filteredSongs.map((song) => ({
           id: song.id,

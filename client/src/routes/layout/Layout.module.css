@@ -1,8 +1,9 @@
-/* קונטיינר חיצוני
-/* .layoutContainer {
+/* קונטיינר חיצוני */
+.layoutContainer {
   display: flex;
   min-height: 100vh; /* גובה מינימלי של חלון הדפדפן */
- 
+}
+
 /* סיידבר קבוע */
 .sidebar {
   width: 240px;
@@ -15,13 +16,16 @@
   overflow: hidden; /* מונע גלילה בסיידבר */
 }
 
-/* תוכן ראשי - מתוזז מימין לסיידבר */
+/* תוכן ראשי - מתוזז מימין לסיידבר רק כשיש סיידבר */
 .mainContent {
-  margin-left: 240px; /* שוליים שווים לרוחב הסיידבר */
   padding: 20px; /* ריווח פנימי */
   flex-grow: 1;
   min-height: 100vh;
   overflow-y: auto; /* גלילה בתוכן הראשי במידת הצורך */
   box-sizing: border-box;
-  
+}
+
+/* מרג'ין שמאל רק כשיש סיידבר */
+.mainContentWithSidebar {
+  margin-left: 240px; /* שוליים שווים לרוחב הסיידבר */
 }

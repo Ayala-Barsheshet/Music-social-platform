@@ -49,24 +49,6 @@ export const serviceGetUserFavoriteSongs = async (userId) => {
 };
 
 
-// export const serviceGetAllSongs = async (app) => {
-//     try {
-//         const approvedStatus = app === "approved" ? 1 : 0;
-
-//         const query = `
-//             SELECT songs.*, albums.name AS album_name
-//             FROM songs
-//             JOIN albums ON songs.album_id = albums.id
-//             WHERE songs.approved = ?
-//         `;
-
-//         const [results] = await db.promise().query(query, [approvedStatus]);
-//         return results;
-//     } catch (err) {
-//         throw err;
-//     }
-// };
-
 
 export const serviceGetUnApprovedSongs = async () => {
   try {
