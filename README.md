@@ -7,6 +7,7 @@ the SHARE aspect introduces a collaborative network for artists.<br>
 Every piece of content is curated and managed through a strict approval workflow,<br>
 ensuring a professional environment for both creators and fans.<br>
 
+
 ### Tech Stack
 * Frontend: **React.js**
   
@@ -35,7 +36,7 @@ The system features a robust permission model with three distinct levels:
 * Growth: Option to request a promotion to "Artist" status from the Administrator.
 
 
-## Installation & Setup
+### Installation & Setup
 Follow these steps to run the project locally:
 
 1. **Clone the repository** Copy and run this command in your terminal:  
@@ -49,13 +50,15 @@ Follow these steps to run the project locally:
 
 4. **Environment Configuration** Ensure your database and environment variables are configured before running the servers.
 
+
 ### Architecture & Security 
 
-Layered Architecture: Clear separation of concerns using Controllers, Services, and a DB Layer.
+* Layered Architecture: Clear separation of concerns using Controllers, Services, and a DB Layer.
 
-Secure Auth: JWT session management ensuring private client-server communication.
+* Secure Auth: JWT session management ensuring private client-server communication.
 
-Database Design: Optimized MySQL relational structure for efficient playlist and user management.
+* Database Design: Optimized MySQL relational structure for efficient playlist and user management.
+
 
 ### Disclaimer
 This project was developed for educational and portfolio purposes only.<br>
