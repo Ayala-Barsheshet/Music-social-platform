@@ -14,7 +14,7 @@ ensuring a professional environment for both creators and fans.<br>
   
 * Database: **MySQL (Optimized Schema)**
   
-*Security: **JWT-based Auth, Bcrypt Encryption**
+* Security: **JWT-based Auth, Bcrypt Encryption**
 
 
 ### Role-Based Access Control (RBAC) 
