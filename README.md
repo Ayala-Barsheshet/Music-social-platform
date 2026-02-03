@@ -64,3 +64,6 @@ Follow these steps to run the project locally:
 This project was developed for educational and portfolio purposes only.<br>
 It is inspired by Spotify but is not affiliated with, associated with, or endorsed by Spotify AB.<br>
 All trademarks and brand names belong to their respective owners.
+
+*Created by Ayala Barsheshet*
+
