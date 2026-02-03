@@ -1,8 +1,8 @@
 
+import 'dotenv/config';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -15,7 +15,6 @@ import commentRoutes from './routes/Comments.js';
 import likesLovesRoutes from './routes/Likes-loves.js';
 import videoRoutes from './routes/video.js';
 
-dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
