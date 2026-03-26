@@ -68,7 +68,7 @@ const Song = () => {
       if (field === "liked" && res.likeCount !== undefined) {
         setLikeCount(res.likeCount);
       }
-      
+
       setActionError(null);
     } catch (err) {
       stateSetter(!newValue);
@@ -84,8 +84,13 @@ const Song = () => {
       {likesError && <div className={styles.error}>{likesError}</div>}
       {actionError && <div className={styles.error}>{actionError}</div>}
 
-      <video controls className={styles.myVideo}>
+      {/* <video controls className={styles.myVideo}>
         <source src={`http://localhost:3000${song.file_path}`} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video> */}
+
+      <video controls className={styles.myVideo}>
+        <source src={song.file_path} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
