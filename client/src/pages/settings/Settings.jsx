@@ -11,13 +11,17 @@ const Settings = () => {
 
 
   const handleUpdateInfo = async () => {
+    if (!form.username || !form.email) {
+      setMessage("Username and email are required");
+      return;
+    }
     try {
-       const updatedUser = await APIRequests.patchRequest('users', { username: form.username, email: form.email });
+      const updatedUser = await APIRequests.patchRequest('users', { username: form.username, email: form.email });
       setUser(updatedUser);
       sessionStorage.setItem("currentUser", JSON.stringify(updatedUser));
       setMessage("Details updated successfully");
     } catch (error) {
-      setMessage(error.message||"Error updating details");
+      setMessage(error.message || "Error updating details");
     }
   };
 

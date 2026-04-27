@@ -1,10 +1,14 @@
-import db from '../DB/mysql.js';
-
+import db from '../DB/supabase.js';
+ 
 export const serviceGetAlbumsByAuthorizedUsers = async (userId, accessType) => {
-  const query = accessType === 'admin'
-    ? 'SELECT * FROM albums'
-    : 'SELECT * FROM albums WHERE artist_id = ?';
-  const params = accessType === 'admin' ? [] : [userId];
-  const [rows] = await db.promise().query(query, params);
-  return rows;
+  let query = db.from('albums').select('*');
+ 
+  if (accessType !== 'admin') {
+    query = query.eq('artist_id', userId);
+  }
+ 
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
 };
+ 

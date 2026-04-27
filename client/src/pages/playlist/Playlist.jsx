@@ -19,6 +19,16 @@ const Playlist = () => {
           name: res[0].playlist_name || 'Playlist',
           description: res[0].playlist_description || ''
         });
+//         if (!res || res.length === 0) {
+//   setPlaylistInfo({ name: 'Playlist', description: '' });
+//   setSongs([]);
+//   return;
+// }
+
+// setPlaylistInfo({
+//   name: res[0]?.name || 'Playlist',
+//   description: res[0]?.description || ''
+// });
 
         const filteredSongs = res.filter((row) => row.id !== null);
 

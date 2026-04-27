@@ -1,42 +1,80 @@
-import db from '../DB/mysql.js';
+import db from '../DB/supabase.js';
 
 export const serviceGetSongsByPlaylistId = async (playlistId) => {
-  const [rows] = await db.promise().query(`
-      SELECT 
-      s.id, 
-      s.name, 
-      s.artist_name, 
-      s.genre, 
-      p.name AS playlist_name, 
-      p.description AS playlist_description
-      FROM playlists p
-      LEFT JOIN playlists_songs ps ON p.id = ps.playlist_id
-      LEFT JOIN songs s ON s.id = ps.song_id
-      WHERE p.id = ?
-  `, [playlistId]);
-  return rows;
+  const { data, error } = await db
+    .from('playlists')
+    .select(`
+      name,
+      description,
+      playlists_songs (
+        songs (
+          id,
+          name,
+          artist_name,
+          genre
+        )
+      )
+    `)
+    .eq('id', playlistId);
+
+  if (error) throw error;
+
+  const playlist = data[0];
+  if (!playlist) return [];
+
+  if (playlist.playlists_songs.length === 0) {
+    return [{
+      id: null,
+      name: null,
+      artist_name: null,
+      genre: null,
+      playlist_name: playlist.name,
+      playlist_description: playlist.description,
+    }];
+  }
+
+  return playlist.playlists_songs.map(({ songs: song }) => ({
+    id: song?.id ?? null,
+    name: song?.name ?? null,
+    artist_name: song?.artist_name ?? null,
+    genre: song?.genre ?? null,
+    playlist_name: playlist.name,
+    playlist_description: playlist.description,
+  }));
 };
 
 export const serviceAddSongToPlaylist = async (playlistId, songId, userId) => {
-  const [check] = await db.promise().query(
-    `SELECT * FROM playlists WHERE id = ? AND user_id = ?`, [playlistId, userId]
-  );
-  if (!check.length) throw new Error('Unauthorized access to playlist');
+  const { data: check, error: checkError } = await db
+    .from('playlists')
+    .select('*')
+    .eq('id', playlistId)
+    .eq('user_id', userId);
 
-  await db.promise().query(
-    `INSERT IGNORE INTO playlists_songs (playlist_id, song_id) VALUES (?, ?)`,
-    [playlistId, songId]
-  );
+  if (checkError) throw checkError;
+  if (!check || !check.length) throw new Error('Unauthorized access to playlist');
+
+  const { error } = await db
+    .from('playlists_songs')
+    .upsert({ playlist_id: playlistId, song_id: songId }, { ignoreDuplicates: true });
+
+  if (error) throw error;
 };
 
 export const serviceRemoveSongFromPlaylist = async (playlistId, songId, userId) => {
-  const [check] = await db.promise().query(
-    `SELECT * FROM playlists WHERE id = ? AND user_id = ?`, [playlistId, userId]
-  );
-  if (!check.length) throw new Error('Unauthorized access to playlist');
+  const { data: check, error: checkError } = await db
+    .from('playlists')
+    .select('*')
+    .eq('id', playlistId)
+    .eq('user_id', userId);
 
-  await db.promise().query(
-    `DELETE FROM playlists_songs WHERE playlist_id = ? AND song_id = ?`,
-    [playlistId, songId]
-  );
+  if (checkError) throw checkError;
+  if (!check || !check.length) throw new Error('Unauthorized access to playlist');
+
+  const { error } = await db
+    .from('playlists_songs')
+    .delete()
+    .eq('playlist_id', playlistId)
+    .eq('song_id', songId);
+
+  if (error) throw error;
 };

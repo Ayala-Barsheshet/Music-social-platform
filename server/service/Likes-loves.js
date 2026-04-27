@@ -1,34 +1,42 @@
-import db from '../DB/mysql.js';
+import db from '../DB/supabase.js';
 
 export const serviceGetLikeStatus = async (user_id, song_id) => {
-  const [rows] = await db.promise().query(
-    `SELECT liked, loved FROM likes WHERE user_id = ? AND song_id = ?`,
-    [user_id, song_id]
-  );
+  const { data: rows, error: rowsError } = await db
+    .from('likes')
+    .select('liked, loved')
+    .eq('user_id', user_id)
+    .eq('song_id', song_id);
 
-  const [[countRow]] = await db.promise().query(
-    `SELECT COUNT(*) AS likeCount FROM likes WHERE song_id = ? AND liked = 1`,
-    [song_id]
-  );
+  if (rowsError) throw rowsError;
 
-  if (rows.length === 0) {
-    rows[0] = { liked: null, loved: null };
-  }
-  return { likeCount: countRow.likeCount, ...rows[0] };
+  const { count, error: countError } = await db
+    .from('likes')
+    .select('*', { count: 'exact', head: true })
+    .eq('song_id', song_id)
+    .eq('liked', true);
+
+  if (countError) throw countError;
+
+  const row = rows.length === 0 ? { liked: null, loved: null } : rows[0];
+  return { likeCount: count, ...row };
 };
 
 export const serviceAddLikeRow = async (user_id, song_id) => {
-  await db.promise().query(
-    `INSERT INTO likes (user_id, song_id, liked, loved) VALUES (?, ?, 0, 0)`,
-    [user_id, song_id]
-  );
+  const { error } = await db
+    .from('likes')
+    .insert({ user_id, song_id, liked: false, loved: false });
+
+  if (error) throw error;
 };
 
 export const serviceUpdateLikeField = async (user_id, song_id, field, value) => {
-  await db.promise().query(
-    `UPDATE likes SET ${field} = ? WHERE user_id = ? AND song_id = ?`,
-    [value, user_id, song_id]
-  );
+  const { error } = await db
+    .from('likes')
+    .update({ [field]: value })
+    .eq('user_id', user_id)
+    .eq('song_id', song_id);
+
+  if (error) throw error;
 
   return serviceGetLikeStatus(user_id, song_id);
 };

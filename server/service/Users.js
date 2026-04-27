@@ -1,153 +1,171 @@
-import db from '../DB/mysql.js';
+import db from '../DB/supabase.js';
 import bcrypt from 'bcrypt';
 import { hashPassword } from '../auth/auth.js';
 
-
 export const serviceLoginUser = async (username, password) => {
-    try {
+  try {
+    const { data: users, error } = await db
+      .from('users')
+      .select('*, passwords(hash)')
+      .eq('username', username);
 
-        const userQuery = `
-            SELECT users.*, passwords.hash 
-            FROM users 
-            JOIN passwords ON users.id = passwords.user_id 
-            WHERE users.username = ?`;
-
-        const [users] = await db.promise().query(userQuery, [username]);
-
-        if (!users.length) {
-            throw new Error('Invalid username or password');
-        }
-
-        const user = users[0];
-
-        const actualPassword = user.hash;
-        const isMatch = await bcrypt.compare(password, actualPassword);
-
-        if (!isMatch) {
-            throw new Error('Invalid username or password');
-        }
-
-        return user;
-    } catch (error) {
-        throw error;
+    if (error) throw error;
+    if (!users || !users.length) {
+      throw new Error('Invalid username or password');
     }
+
+    const user = { ...users[0], hash: users[0].passwords?.hash };
+    delete user.passwords;
+
+    const isMatch = await bcrypt.compare(password, user.hash);
+    if (!isMatch) {
+      throw new Error('Invalid username or password');
+    }
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const serviceRegisterUser = async (username, password, email) => {
-    try {
-        const userQuery = 'SELECT * FROM users WHERE username = ?';
-        const [users] = await db.promise().query(userQuery, [username]);
+  try {
+    const { data: existingUsers, error: checkError } = await db
+      .from('users')
+      .select('*')
+      .eq('username', username);
 
-        if (users.length) {
-            const error = new Error('Username already exists');
-            error.statusCode = 409;
-            throw error;
-        }
+    if (checkError) throw checkError;
 
-        const insertUserQuery = 'INSERT INTO users (username, email, access_type, created_at) VALUES (?, ?, "user", NOW())';
-        const [newUser] = await db.promise().query(insertUserQuery, [username, email]);
-
-        const hashedPassword = await hashPassword(password);
-
-        const insertPasswordQuery = 'INSERT INTO passwords (user_id, hash) VALUES (?, ?)';
-        await db.promise().query(insertPasswordQuery, [newUser.insertId, hashedPassword]);
-
-        return {
-            id: newUser.insertId,
-            username,
-            access_type: 'user',
-        };
-
-    } catch (error) {
-        throw error;
+    if (existingUsers && existingUsers.length) {
+      const error = new Error('Username already exists');
+      error.statusCode = 409;
+      throw error;
     }
+
+    const { data: newUser, error: insertError } = await db
+      .from('users')
+      .insert({ username, email, access_type: 'user', created_at: new Date().toISOString() })
+      .select()
+      .single();
+
+    if (insertError) throw insertError;
+
+    const hashedPassword = await hashPassword(password);
+
+    const { error: passwordError } = await db
+      .from('passwords')
+      .insert({ user_id: newUser.id, hash: hashedPassword });
+
+    if (passwordError) throw passwordError;
+
+    return {
+      id: newUser.id,
+      username,
+      access_type: 'user',
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const serviceGetRequestedArtistAccess = async () => {
-    try {
+  try {
+    const { data: users, error } = await db
+      .from('users')
+      .select('*')
+      .eq('requested_artist', true);
 
-        const query = 'SELECT * FROM users WHERE requested_artist = 1';
-        const [users] = await db.promise().query(query);
-
-        return users;
-
-    } catch (error) {
-        throw error;
-    }
+    if (error) throw error;
+    return users;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const serviceUpdateUserDetails = async ({
-    email,
-    username,
-    updaterUserId,
-    requested_artist,
-    access_type,
-    updaterAccessType,
-    userIdToUpdate
+  email,
+  username,
+  updaterUserId,
+  requested_artist,
+  access_type,
+  updaterAccessType,
+  userIdToUpdate,
 }) => {
-    try {
-        // Update only provided fields by user himself
-        if (email !== undefined || username !== undefined) {
-            await updateUserProfile(email, username, updaterUserId);
-        }
-
-        // Update requested_artist by manager or user 
-        if (requested_artist !== undefined) {
-            await updateRequestedArtist(requested_artist, updaterAccessType, updaterUserId, userIdToUpdate);
-        }
-
-        // Update user access_type by manager
-        if (access_type !== undefined) {
-            await updateUserAccessType(access_type, updaterAccessType, userIdToUpdate);
-        }
-
-        // Return the updated user (after all changes)
-        const targetUserId =
-            updaterAccessType === 'admin' && userIdToUpdate !== undefined
-                ? userIdToUpdate
-                : updaterUserId;
-
-        const [users] = await db.promise().query('SELECT * FROM users WHERE id = ?', [targetUserId]);
-        return users[0];
-
-    } catch (error) {
-        throw error;
+  try {
+    if (email !== undefined || username !== undefined) {
+      await updateUserProfile(email, username, updaterUserId);
     }
-};
 
+    if (requested_artist !== undefined) {
+      await updateRequestedArtist(requested_artist, updaterAccessType, updaterUserId, userIdToUpdate);
+    }
+
+    if (access_type !== undefined) {
+      await updateUserAccessType(access_type, updaterAccessType, userIdToUpdate);
+    }
+
+    const targetUserId =
+      updaterAccessType === 'admin' && userIdToUpdate !== undefined
+        ? userIdToUpdate
+        : updaterUserId;
+
+    const { data: users, error } = await db
+      .from('users')
+      .select('*')
+      .eq('id', targetUserId);
+
+    if (error) throw error;
+    return users[0];
+  } catch (error) {
+    throw error;
+  }
+};
 
 const updateUserProfile = async (email, username, userId) => {
-    const fields = [];
-    const vals = [];
+  const fields = {};
 
-    if (email !== undefined) { fields.push("email = ?"); vals.push(email); }
-    if (username !== undefined) { fields.push("username = ?"); vals.push(username); }
+  if (email !== undefined) fields.email = email;
+  if (username !== undefined) fields.username = username;
 
-    if (fields.length) {
-        vals.push(userId);
-        await db.promise().query(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`, vals);
-    }
+  if (Object.keys(fields).length) {
+    const { error } = await db
+      .from('users')
+      .update(fields)
+      .eq('id', userId);
+
+    if (error) throw error;
+  }
 };
-
 
 const updateRequestedArtist = async (requested_artist, updaterAccessType, updaterUserId, userIdToUpdate) => {
-    let targetUserId;
-    if (updaterAccessType === 'admin' && userIdToUpdate !== undefined) {
-        targetUserId = userIdToUpdate;
-    } else if (updaterAccessType === 'user') {
-        targetUserId = updaterUserId;
-    } else {
-        throw new Error("Unauthorized to update requested_artist");
-    }
+  let targetUserId;
 
-    await db.promise().query(`UPDATE users SET requested_artist = ? WHERE id = ?`, [requested_artist, targetUserId]);
+  if (updaterAccessType === 'admin' && userIdToUpdate !== undefined) {
+    targetUserId = userIdToUpdate;
+  } else if (updaterAccessType === 'user') {
+    targetUserId = updaterUserId;
+  } else {
+    throw new Error('Unauthorized to update requested_artist');
+  }
+
+  const { error } = await db
+    .from('users')
+    .update({ requested_artist })
+    .eq('id', targetUserId);
+
+  if (error) throw error;
 };
 
-
 const updateUserAccessType = async (access_type, updaterAccessType, userIdToUpdate) => {
-    if (updaterAccessType !== 'admin') {
-        throw new Error("Only admin can change access_type");
-    }
+  if (updaterAccessType !== 'admin') {
+    throw new Error('Only admin can change access_type');
+  }
 
-    await db.promise().query(`UPDATE users SET access_type = ? WHERE id = ?`, [access_type, userIdToUpdate]);
+  const { error } = await db
+    .from('users')
+    .update({ access_type })
+    .eq('id', userIdToUpdate);
+
+  if (error) throw error;
 };
