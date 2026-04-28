@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-const SERVER_URL = import.meta.env.VITE_API_URL;
+const SERVER_URL = import.meta.env.VITE_API_URL+ '/';
 
 class APIRequests extends Component {
 
