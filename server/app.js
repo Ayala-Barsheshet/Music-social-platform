@@ -38,6 +38,14 @@ app.use('/playlist-songs', playlistSongsRoutes);
 app.use('/comments', commentRoutes);
 app.use('/likes-loves', likesLovesRoutes);
 
+
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "server is alive"
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
