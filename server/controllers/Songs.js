@@ -35,10 +35,8 @@ export const getRecentSongs = async (req, res) => {
 
 export const getUserFavoriteSongs = async (req, res) => {
     try {
-            console.log("🔥 controller reached");
         const userId = req.user.id;
         const songs = await serviceGetUserFavoriteSongs(userId);
-        console.log("🔥 User's favorite songs:", songs);
         res.status(200).json(songs);
     } catch (error) {
         res.status(500).json({ error: error.message });
