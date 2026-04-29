@@ -1,5 +1,5 @@
 # SPOTIFY&SHARE | Music & Social Platform 
-**Live Demo:** https://music-social-platform.netlify.app/    <br>
+**Live Demo:** https://music-social-platform.netlify.app/    <br><br>
 SPOTIFY&SHARE is a full-stack social platform designed for music discovery and artist collaboration. <br>
 It bridges the gap between listeners and creators, offering a managed ecosystem for high-quality content sharing.
 
