@@ -181,6 +181,95 @@
   transform: translateY(-1px);
 }
 
+/* Platform Footer Section */
+.platformSection {
+  margin-top: 2rem;
+  padding: 3.5rem 2rem;
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.1), rgba(255,255,255,0.03));
+  border-radius: 20px;
+  border: 1px solid rgba(29, 185, 84, 0.2);
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(29, 185, 84, 0.08);
+}
+
+.platformLogo {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.logoText {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(45deg, #1db954, #1ed760);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.platformSlogan {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* Feature Cards Row */
+.platformFeatures {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.featureCard {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(29, 185, 84, 0.2);
+  border-radius: 16px;
+  padding: 1.8rem 1.5rem;
+  max-width: 260px;
+  flex: 1 1 220px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(29, 185, 84, 0.2);
+  border-color: rgba(29, 185, 84, 0.45);
+}
+
+.featureIcon {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.featureTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1db954;
+  margin-bottom: 0.6rem;
+}
+
+.featureText {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.platformTagline {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  margin: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .songSearchPage {

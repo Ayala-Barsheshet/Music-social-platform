@@ -11,7 +11,7 @@ const Home = () => {
   const [recentOffset, setRecentOffset] = useState(0);
   const [hasMoreMostLiked, setHasMoreMostLiked] = useState(true);
   const [hasMoreRecent, setHasMoreRecent] = useState(true);
-  const [message , setMessage] = useState(null)
+  const [message, setMessage] = useState(null)
 
   const { user } = useUser();
   const navigate = useNavigate();
@@ -46,11 +46,11 @@ const Home = () => {
   }) => {
     try {
       const newSongs = await APIRequests.getRequest(
-      `songs/${endpoint}?limit=${FETCH_LIMIT}&offset=${offset}`
+        `songs/${endpoint}?limit=${FETCH_LIMIT}&offset=${offset}`
       );
 
       if (newSongs.length < FETCH_LIMIT) {
-      hasMoreSetter(false);
+        hasMoreSetter(false);
       }
 
       const songsToAdd = newSongs.slice(0, LIMIT);
@@ -125,6 +125,41 @@ const Home = () => {
             load more...
           </button>
         )}
+        {/* === PLATFORM FOOTER SECTION === */}
+        <div className={styles.platformSection}>
+          <div className={styles.platformLogo}>
+            🎵 <span className={styles.logoText}>Spotify & Share</span>
+          </div>
+          <p className={styles.platformSlogan}>Share the music. Share the moment.</p>
+
+          <div className={styles.platformFeatures}>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🎤</span>
+              <h3 className={styles.featureTitle}>פלטפורמה לאמנים אמיתיים</h3>
+              <p className={styles.featureText}>
+                כל שיר עובר אישור של מנהל המערכת לפני פרסום - כך תמיד תמצא כאן מוזיקה איכותית בלבד.
+              </p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🤝</span>
+              <h3 className={styles.featureTitle}>קהילה שמחברת</h3>
+              <p className={styles.featureText}>
+                אהבת שיר? הגב, שמור לפלייליסט, ועזור לאמן לצמוח. כאן כל לייק שווה משהו.
+              </p>
+            </div>
+            <div className={styles.featureCard}>
+              <span className={styles.featureIcon}>🚀</span>
+              <h3 className={styles.featureTitle}>הדרך שלך להיות אמן</h3>
+              <p className={styles.featureText}>
+                מאזין שרוצה לשתף מוזיקה? בקש קידום למעמד אמן והתחל להעלות את היצירות שלך.
+              </p>
+            </div>
+          </div>
+
+          <p className={styles.platformTagline}>
+            המקום שבו מאזינים פוגשים אמנים - ואמנים מוצאים קהל.
+          </p>
+        </div>
       </div>
     </div>
   );
