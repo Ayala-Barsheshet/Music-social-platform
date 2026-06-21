@@ -124,8 +124,7 @@ const Home = () => {
           >
             load more...
           </button>
-        )}
-        {/* === PLATFORM FOOTER SECTION === */}
+        )}{/* === PLATFORM FOOTER SECTION === */}
         <div className={styles.platformSection}>
           <div className={styles.platformLogo}>
             🎵 <span className={styles.logoText}>Spotify & Share</span>
@@ -135,29 +134,29 @@ const Home = () => {
           <div className={styles.platformFeatures}>
             <div className={styles.featureCard}>
               <span className={styles.featureIcon}>🎤</span>
-              <h3 className={styles.featureTitle}>פלטפורמה לאמנים אמיתיים</h3>
+              <h3 className={styles.featureTitle}>A Platform for Real Artists</h3>
               <p className={styles.featureText}>
-                כל שיר עובר אישור של מנהל המערכת לפני פרסום - כך תמיד תמצא כאן מוזיקה איכותית בלבד.
+                Every song goes through admin approval before publishing - so you'll always find quality music here only.
               </p>
             </div>
             <div className={styles.featureCard}>
               <span className={styles.featureIcon}>🤝</span>
-              <h3 className={styles.featureTitle}>קהילה שמחברת</h3>
+              <h3 className={styles.featureTitle}>A Community That Connects</h3>
               <p className={styles.featureText}>
-                אהבת שיר? הגב, שמור לפלייליסט, ועזור לאמן לצמוח. כאן כל לייק שווה משהו.
+                Loved a song? Comment, save it to a playlist, and help the artist grow. Here, every like matters.
               </p>
             </div>
             <div className={styles.featureCard}>
               <span className={styles.featureIcon}>🚀</span>
-              <h3 className={styles.featureTitle}>הדרך שלך להיות אמן</h3>
+              <h3 className={styles.featureTitle}>Your Path to Becoming an Artist</h3>
               <p className={styles.featureText}>
-                מאזין שרוצה לשתף מוזיקה? בקש קידום למעמד אמן והתחל להעלות את היצירות שלך.
+                A listener who wants to share music? Request a promotion to artist status and start uploading your creations.
               </p>
             </div>
           </div>
 
           <p className={styles.platformTagline}>
-            המקום שבו מאזינים פוגשים אמנים - ואמנים מוצאים קהל.
+            The place where listeners meet artists - and artists find an audience.
           </p>
         </div>
       </div>
