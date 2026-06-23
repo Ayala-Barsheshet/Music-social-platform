@@ -134,38 +134,42 @@ const updateUserProfile = async (email, username, userId) => {
       .update(fields)
       .eq('id', userId);
 
+    if (error) {
+      if (error.code === '23505') {
+        throw new Error('Username already exists');
+      }
+      throw error;
+    }
+  };
+
+  const updateRequestedArtist = async (requested_artist, updaterAccessType, updaterUserId, userIdToUpdate) => {
+    let targetUserId;
+
+    if (updaterAccessType === 'admin' && userIdToUpdate !== undefined) {
+      targetUserId = userIdToUpdate;
+    } else if (updaterAccessType === 'user') {
+      targetUserId = updaterUserId;
+    } else {
+      throw new Error('Unauthorized to update requested_artist');
+    }
+
+    const { error } = await db
+      .from('users')
+      .update({ requested_artist })
+      .eq('id', targetUserId);
+
     if (error) throw error;
-  }
-};
+  };
 
-const updateRequestedArtist = async (requested_artist, updaterAccessType, updaterUserId, userIdToUpdate) => {
-  let targetUserId;
+  const updateUserAccessType = async (access_type, updaterAccessType, userIdToUpdate) => {
+    if (updaterAccessType !== 'admin') {
+      throw new Error('Only admin can change access_type');
+    }
 
-  if (updaterAccessType === 'admin' && userIdToUpdate !== undefined) {
-    targetUserId = userIdToUpdate;
-  } else if (updaterAccessType === 'user') {
-    targetUserId = updaterUserId;
-  } else {
-    throw new Error('Unauthorized to update requested_artist');
-  }
+    const { error } = await db
+      .from('users')
+      .update({ access_type })
+      .eq('id', userIdToUpdate);
 
-  const { error } = await db
-    .from('users')
-    .update({ requested_artist })
-    .eq('id', targetUserId);
-
-  if (error) throw error;
-};
-
-const updateUserAccessType = async (access_type, updaterAccessType, userIdToUpdate) => {
-  if (updaterAccessType !== 'admin') {
-    throw new Error('Only admin can change access_type');
-  }
-
-  const { error } = await db
-    .from('users')
-    .update({ access_type })
-    .eq('id', userIdToUpdate);
-
-  if (error) throw error;
-};
+    if (error) throw error;
+  };
