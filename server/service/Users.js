@@ -128,12 +128,13 @@ const updateUserProfile = async (email, username, userId) => {
   if (email !== undefined) fields.email = email;
   if (username !== undefined) fields.username = username;
 
-  if (Object.keys(fields).length) {
+  if (!Object.keys(fields).length) return;
+
     const { error } = await db
       .from('users')
       .update(fields)
       .eq('id', userId);
-  }
+  
     if (error) {
       if (error.code === '23505') {
         throw new Error('Username already exists');
