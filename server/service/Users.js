@@ -133,7 +133,7 @@ const updateUserProfile = async (email, username, userId) => {
       .from('users')
       .update(fields)
       .eq('id', userId);
-
+  }
     if (error) {
       if (error.code === '23505') {
         throw new Error('Username already exists');
