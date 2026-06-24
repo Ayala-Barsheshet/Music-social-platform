@@ -237,7 +237,7 @@ const AccessControl = () => {
               {filteredUsers.map(user => (
                 <li key={user.id} className={styles.songItem}>
                   <span className={styles.songInfo}>
-                    {user.username} ({user.email}) — {user.access_type}
+                    {user.username} ({user.email}) - {user.access_type}
                   </span>
                   <div className={styles.actions}>
                     <select
