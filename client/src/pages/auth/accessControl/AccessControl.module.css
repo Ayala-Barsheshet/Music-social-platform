@@ -198,7 +198,9 @@
   margin: 2rem 0;
 }
 
-.searchSelect {
+/* INPUTS + SELECTS UNIFIED STYLE */
+input,
+select {
   padding: 1rem 1.5rem;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
@@ -206,12 +208,15 @@
   border-radius: 50px;
   color: white;
   font-size: 1rem;
-  min-width: 200px;
-  cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
 
-  /* חשוב להוסיף */
+/* SELECT ARROW + STYLE */
+select {
+  cursor: pointer;
+
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -221,14 +226,27 @@
   background-position: calc(100% - 18px) center, calc(100% - 12px) center;
   background-size: 6px 6px;
   background-repeat: no-repeat;
+
   padding-right: 2.5rem;
 }
 
-.searchSelect option {
-  background-color: #0f0f0f;  /* שחור עמוק כמו בתמונה */
-  color: #1db954;
+/* FOCUS STATE */
+input:focus,
+select:focus {
+  border-color: rgba(29, 185, 84, 0.6);
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2);
 }
 
+/* PLACEHOLDER */
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* DROPDOWN OPTIONS */
+option {
+  background-color: #0f0f0f;
+  color: #1db954;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -259,43 +277,6 @@
   .actions {
     justify-content: center;
   }
-}
-
-/* shared select style (גם לחיפוש וגם לטבלת משתמשים) */
-.section select {
-  padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50px;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  background-image: linear-gradient(45deg, transparent 50%, #1db954 50%),
-                    linear-gradient(135deg, #1db954 50%, transparent 50%);
-  background-position: calc(100% - 18px) center, calc(100% - 12px) center;
-  background-size: 6px 6px;
-  background-repeat: no-repeat;
-  padding-right: 2.5rem;
-}
-
-.glassSelect:focus {
-  outline: none;
-  border-color: rgba(29, 185, 84, 0.6);
-  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2);
-}
-
-/* options */
-.glassSelect option {
-  background-color: #0f0f0f;
-  color: #1db954;
 }
 
 @media (max-width: 480px) {
