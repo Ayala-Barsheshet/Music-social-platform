@@ -199,53 +199,57 @@
 }
 
 /* INPUTS + SELECTS UNIFIED STYLE */
-input,
-select {
+.container input,
+.container select {
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08) !important;
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(20px); /* תמיכה בדפדפני Safari */
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 50px;
-  color: white;
+  color: #ffffff !important;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  font-family: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   outline: none;
+  box-sizing: border-box;
 }
 
 /* SELECT ARROW + STYLE */
-select {
+.container select {
   cursor: pointer;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
 
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
+  /* יצירת חץ מעוצב מותאם אישית בצבע ירוק ספוטיפיי */
   background-image: linear-gradient(45deg, transparent 50%, #1db954 50%),
-                    linear-gradient(135deg, #1db954 50%, transparent 50%);
-  background-position: calc(100% - 18px) center, calc(100% - 12px) center;
-  background-size: 6px 6px;
-  background-repeat: no-repeat;
-
-  padding-right: 2.5rem;
+                    linear-gradient(135deg, #1db954 50%, transparent 50%) !important;
+  background-position: calc(100% - 20px) center, calc(100% - 14px) center !important;
+  background-size: 6px 6px, 6px 6px !important;
+  background-repeat: no-repeat !important;
+  padding-right: 3rem !important;
 }
 
 /* FOCUS STATE */
-input:focus,
-select:focus {
-  border-color: rgba(29, 185, 84, 0.6);
-  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2);
+.container input:focus,
+.container select:focus {
+  border-color: rgba(29, 185, 84, 0.6) !important;
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2), 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
 }
 
 /* PLACEHOLDER */
-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+.container input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
 }
 
 /* DROPDOWN OPTIONS */
-option {
-  background-color: #0f0f0f;
-  color: #1db954;
+.container select option {
+  background-color: #121212 !important; /* רקע כהה התואם לעיצוב הכללי */
+  color: #ffffff !important;
+  padding: 1rem;
 }
 
 /* Responsive Design */
