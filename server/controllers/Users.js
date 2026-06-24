@@ -3,7 +3,9 @@ import {
     serviceLoginUser,
     serviceRegisterUser,
     serviceGetRequestedArtistAccess,
-    serviceUpdateUserDetails
+    serviceUpdateUserDetails,
+    serviceGetAllUsers,
+    serviceDeleteUser
 } from '../service/Users.js';
 
 export const loginUser = async (req, res) => {
@@ -113,4 +115,31 @@ export const updateUserDetails = async (req, res) => {
 
         res.status(500).json({ error: error.message });
     }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const { accessType } = req.user;
+    if (accessType !== 'admin')
+      return res.status(403).json({ error: 'Unauthorized' });
+
+    const users = await serviceGetAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { accessType } = req.user;
+    if (accessType !== 'admin')
+      return res.status(403).json({ error: 'Unauthorized' });
+
+    const { id } = req.params;
+    await serviceDeleteUser(id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

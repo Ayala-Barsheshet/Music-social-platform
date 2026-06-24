@@ -69,6 +69,24 @@ export const serviceRegisterUser = async (username, password, email) => {
   }
 };
 
+export const serviceGetAllUsers = async () => {
+  const { data, error } = await db
+    .from('users')
+    .select('id, username, email, access_type, created_at');
+
+  if (error) throw error;
+  return data;
+};
+
+export const serviceDeleteUser = async (userId) => {
+  const { error } = await db
+    .from('users')
+    .delete()
+    .eq('id', userId);
+
+  if (error) throw error;
+};
+
 export const serviceGetRequestedArtistAccess = async () => {
   try {
     const { data: users, error } = await db

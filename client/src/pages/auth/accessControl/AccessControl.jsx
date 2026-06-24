@@ -10,6 +10,11 @@ const AccessControl = () => {
   const [becomeArtistRequests, setBecomeArtistRequests] = useState([]);
   const [artistLoading, setArtistLoading] = useState(true);
   const [artistError, setArtistError] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(true);
+  const [usersError, setUsersError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterRole, setFilterRole] = useState('');
 
   const navigate = useNavigate();
 
@@ -29,15 +34,29 @@ const AccessControl = () => {
   useEffect(() => {
     const fetchPendingArtistAccess = async () => {
       try {
-      const data = await APIRequests.getRequest('users/requested-artist-access');
-      setBecomeArtistRequests(data);
-      setArtistLoading(false);
+        const data = await APIRequests.getRequest('users/requested-artist-access');
+        setBecomeArtistRequests(data);
+        setArtistLoading(false);
       } catch (error) {
-      setArtistError(error.message);
-      setArtistLoading(false);
+        setArtistError(error.message);
+        setArtistLoading(false);
       }
     };
     fetchPendingArtistAccess();
+  }, []);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const data = await APIRequests.getRequest('users');
+        setAllUsers(data);
+        setUsersLoading(false);
+      } catch (error) {
+        setUsersError(error.message);
+        setUsersLoading(false);
+      }
+    };
+    fetchAllUsers();
   }, []);
 
   const handleApprove = async (songId) => {
@@ -82,6 +101,37 @@ const AccessControl = () => {
       setArtistError(err.message);
     }
   };
+
+  const handleChangeRole = async (user, newRole) => {
+    try {
+      await APIRequests.patchRequest('users', {
+        access_type: newRole,
+        userIdToUpdate: user.id,
+      });
+      setAllUsers(prev =>
+        prev.map(u => u.id === user.id ? { ...u, access_type: newRole } : u)
+      );
+    } catch (err) {
+      setUsersError(err.message);
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await APIRequests.deleteRequest(`users/${userId}`);
+      setAllUsers(prev => prev.filter(u => u.id !== userId));
+    } catch (err) {
+      setUsersError(err.message);
+    }
+  };
+
+  const filteredUsers = allUsers.filter(u => {
+    const matchSearch =
+      u.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchRole = filterRole ? u.access_type === filterRole : true;
+    return matchSearch && matchRole;
+  });
 
   return (
     <div className={styles.container}>
@@ -162,6 +212,55 @@ const AccessControl = () => {
           )}
         </div>
         {error && <p className={styles.error}>{error}</p>}
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>User Management</h2>
+
+        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+          <input
+            placeholder="Search by name or email..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+          />
+          <select value={filterRole} onChange={e => setFilterRole(e.target.value)}>
+            <option value="">All Roles</option>
+            <option value="user">User</option>
+            <option value="artist">Artist</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div className={styles.card}>
+          {usersLoading ? <p>Loading...</p> : (
+            <ul className={styles.songList}>
+              {filteredUsers.map(user => (
+                <li key={user.id} className={styles.songItem}>
+                  <span className={styles.songInfo}>
+                    {user.username} ({user.email}) — {user.access_type}
+                  </span>
+                  <div className={styles.actions}>
+                    <select
+                      value={user.access_type}
+                      onChange={e => handleChangeRole(user, e.target.value)}
+                    >
+                      <option value="user">User</option>
+                      <option value="artist">Artist</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                    <button
+                      className={styles.delete}
+                      onClick={() => handleDeleteUser(user.id)}
+                    >
+                      🗑
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          {usersError && <p className={styles.error}>{usersError}</p>}
+        </div>
       </section>
     </div>
   );

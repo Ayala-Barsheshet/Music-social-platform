@@ -4,7 +4,9 @@ import {
   loginUser,
   registerUser,
   getRequestedArtistAccess,
-  updateUserDetails
+  updateUserDetails,
+  getAllUsers,
+  deleteUser
 } from '../controllers/Users.js';
 
 const router = express.Router();
@@ -14,7 +16,10 @@ router.post('/register', registerUser);
 
 router.use(auth);
 
-router.get('/requested-artist-access',getRequestedArtistAccess);
+router.get('/requested-artist-access', getRequestedArtistAccess);
 router.patch('/', updateUserDetails);
+
+router.get('/', getAllUsers);
+router.delete('/:id', deleteUser);
 
 export default router;
