@@ -26,7 +26,7 @@ const UploadSong = () => {
   const fetchMySongs = async () => {
     try {
       setSongsLoading(true);
-      const data = await APIRequests.getRequest('songs/my-songs');
+      const data = await APIRequests.getRequest('my-songs');
       setSongs(data);
     } catch (err) {
       setSongsError(err.message || 'Failed to load your songs');
