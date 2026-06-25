@@ -150,13 +150,14 @@ export const getArtistSongs = async (req, res) => {
  
         const songs = await serviceGetSongsByArtist(userName);
         //test
+        if (songs.length === 0) {
             return res.status(200).json({
                 _debugMode: true,
                 message: "No songs found for this artist name",
                 whatTheServerReceived: userName || "WARNING: userName is undefined or empty!"
             });
-       
-      //  res.status(200).json(songs);
+        }
+        res.status(200).json(songs);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
