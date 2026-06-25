@@ -1,4 +1,3 @@
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -46,7 +45,5 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => {});
 
