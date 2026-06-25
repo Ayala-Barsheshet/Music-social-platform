@@ -166,6 +166,7 @@ export const serviceUpdateSong = async (id, fieldsToUpdate, token) => {
   }
 };
 
+//CHECK IT
 const checkArtistPermissions = async (songId, token, fieldsToUpdate) => {
   const { data: songs, error } = await db
     .from('songs')
@@ -186,4 +187,19 @@ const checkArtistPermissions = async (songId, token, fieldsToUpdate) => {
       throw new Error('Artist cannot update approval status');
     }
   }
+};
+
+export const serviceGetSongsByArtist = async (artistId) => {
+  const { data, error } = await db
+    .from('songs')
+    .select('*, albums(name)')
+    .eq('artist_id', artistId)
+    .order('created_at', { ascending: false });
+ 
+  if (error) throw error;
+ 
+  return data.map(({ albums, ...rest }) => ({
+    ...rest,
+    album_name: albums?.name ?? null,
+  }));
 };

@@ -193,6 +193,126 @@
   color: #1db954;
 }
 
+/* ── Page Wrapper (Wrap both Form and List) ── */
+.pageWrap {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* ── Dashboard & Songs List ── */
+.dashboard {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 2rem;
+}
+
+.dashTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+  color: #fff;
+  text-align: center;
+}
+
+.dashLoading {
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.msgError {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: .7rem 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.emptyMsg {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: .95rem;
+}
+
+.songsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.songCard {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.songHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardPending { border-left: 4px solid #fbbf24; }
+.cardApproved { border-left: 4px solid #1db954; }
+
+.songName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.badge {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.badgePending {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fde68a;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.badgeApproved {
+  background: rgba(29, 185, 84, 0.15);
+  color: #86efac;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+}
+
+.songMeta {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.metaTag {
+  font-size: .78rem;
+  color: rgba(255, 255, 255, .7);
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.metaDate {
+  font-size: .75rem;
+  color: rgba(255, 255, 255, .35);
+  margin-left: auto;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {

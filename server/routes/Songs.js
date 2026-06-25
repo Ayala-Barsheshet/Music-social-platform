@@ -9,7 +9,8 @@ import {
   getSongById,
   addSong,
   updateSong,
-  deleteSong
+  deleteSong,
+  getArtistSongs
 } from '../controllers/Songs.js';
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.get('/most-liked', getMostLikedSongs);
 router.get('/recent', getRecentSongs);
 router.get('/user-favorites', getUserFavoriteSongs);
 router.get('/unapproved', getUnapprovedSongs);
+router.get('/my-songs', getArtistSongs);
 
 router.get('/', getAllSongs);
 router.get('/:id', getSongById);

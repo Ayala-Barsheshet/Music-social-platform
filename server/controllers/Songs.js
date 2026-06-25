@@ -7,7 +7,8 @@ import {
     serviceGetSongById,
     serviceAddSong,
     serviceUpdateSong,
-    serviceDeleteSong
+    serviceDeleteSong,
+    serviceGetSongsByArtist
 } from '../service/Songs.js';
 
 
@@ -135,4 +136,19 @@ export const deleteSong = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 
+};
+
+export const getArtistSongs = async (req, res) => {
+    try {
+        const { accessType, id: userId } = req.user;
+ 
+        if (accessType !== 'artist' && accessType !== 'admin') {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+ 
+        const songs = await serviceGetSongsByArtist(userId);
+        res.status(200).json(songs);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
