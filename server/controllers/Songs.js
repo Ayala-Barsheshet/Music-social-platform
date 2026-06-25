@@ -142,15 +142,41 @@ export const getArtistSongs = async (req, res) => {
     try {
         const { accessType, name: userName } = req.user;
         console.log("name in getArtistSongs:", userName);
-        
- 
+
+
         if (accessType !== 'artist' && accessType !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
         }
- 
+
         const songs = await serviceGetSongsByArtist(userName);
         //test
-       if (songs.length === 0) {
+        try {
+            // הדפסת האובייקט המלא כדי לראות אילו מפתחות קיימים בפנים
+            const userObjKeys = req.user ? Object.keys(req.user).join(', ') : "req.user IS EMPTY";
+            const userObjString = req.user ? JSON.stringify(req.user) : "null";
+
+            const { accessType } = req.user || {};
+
+            if (accessType !== 'artist' && accessType !== 'admin') {
+                return res.status(403).json({ message: 'Access denied' });
+            }
+
+            // זמנית נשבית את השליפה האמיתית ונחזיר ישר את הדיבאג עם תוכן ה-user
+            return res.status(200).json([
+                {
+                    id: "debug-id-456",
+                    name: "🔍 בדיקת תוכן ה-Token",
+                    approved: false,
+                    genre: "דיבאג שלב ב",
+                    lyrics: `האובייקט הגולמי: ${userObjString}`,
+                    album_name: `המפתחות הקיימים ב-user: [${userObjKeys}]`
+                }
+            ]);
+
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+        if (songs.length === 0) {
             return res.status(200).json([
                 {
                     id: "debug-id-123",
