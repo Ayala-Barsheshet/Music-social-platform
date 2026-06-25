@@ -140,56 +140,33 @@ export const deleteSong = async (req, res) => {
 
 export const getArtistSongs = async (req, res) => {
     try {
-        const { accessType, name: userName } = req.user;
-        console.log("name in getArtistSongs:", userName);
-
+        // 1. חילוץ ה-id וה-accessType שקיימים בוודאות בטוקן
+        const { accessType, id: userId } = req.user;
 
         if (accessType !== 'artist' && accessType !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
         }
 
+        // 2. שליפת שם המשתמש מתוך טבלת המשתמשים באמצעות ה-id
+        const { data: userData, error: userError } = await db
+            .from('users')       // ודאי שזה שם טבלת המשתמשים שלך ב-Supabase
+            .select('username')  // ודאי שזה שם עמודת השם (username / name) בטבלה
+            .eq('id', userId)
+            .single();           // מחזיר אובייקט יחיד ולא מערך
+
+        if (userError || !userData) {
+            return res.status(404).json({ error: "Artist profile not found" });
+        }
+
+        // 3. שימוש בשם שנמצא כדי לשלוף את השירים שלו מה-Service
+        const userName = userData.username; 
+        console.log("Found userName from DB:", userName);
+
         const songs = await serviceGetSongsByArtist(userName);
-        //test
-        try {
-            // הדפסת האובייקט המלא כדי לראות אילו מפתחות קיימים בפנים
-            const userObjKeys = req.user ? Object.keys(req.user).join(', ') : "req.user IS EMPTY";
-            const userObjString = req.user ? JSON.stringify(req.user) : "null";
-
-            const { accessType } = req.user || {};
-
-            if (accessType !== 'artist' && accessType !== 'admin') {
-                return res.status(403).json({ message: 'Access denied' });
-            }
-
-            // זמנית נשבית את השליפה האמיתית ונחזיר ישר את הדיבאג עם תוכן ה-user
-            return res.status(200).json([
-                {
-                    id: "debug-id-456",
-                    name: "🔍 בדיקת תוכן ה-Token",
-                    approved: false,
-                    genre: "דיבאג שלב ב",
-                    lyrics: `האובייקט הגולמי: ${userObjString}`,
-                    album_name: `המפתחות הקיימים ב-user: [${userObjKeys}]`
-                }
-            ]);
-
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-        if (songs.length === 0) {
-            return res.status(200).json([
-                {
-                    id: "debug-id-123",
-                    name: "🔍 שרת הדיבאג מופעל",
-                    approved: false,
-                    genre: "טסט",
-                    // נדחוף את המידע לתוך שדה ה-lyrics או ה-album_name שמוצגים במסך
-                    lyrics: "No songs in DB",
-                    album_name: userName ? `קיבלתי מהטוקן: "${userName}"` : "אזהרה: userName ריק או undefined!"
-                }
-            ]);
-        }
+        
+        // 4. החזרת השירים בצורת מערך תקין לפרונטאנד
         res.status(200).json(songs);
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
