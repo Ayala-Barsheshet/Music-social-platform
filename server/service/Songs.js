@@ -189,11 +189,12 @@ const checkArtistPermissions = async (songId, token, fieldsToUpdate) => {
   }
 };
 
-export const serviceGetSongsByArtist = async (artistId) => {
+
+export const serviceGetSongsByArtist = async (artistName) => {
   const { data, error } = await db
     .from('songs')
     .select('*, albums(name)')
-    .eq('artist_id', artistId)
+    .eq('artist_name', artistName) 
     .order('created_at', { ascending: false });
  
   if (error) throw error;
