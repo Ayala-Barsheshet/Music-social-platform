@@ -141,6 +141,8 @@ export const deleteSong = async (req, res) => {
 export const getArtistSongs = async (req, res) => {
     try {
         const { accessType, name: userName } = req.user;
+        console.log("name in getArtistSongs:", userName);
+        
  
         if (accessType !== 'artist' && accessType !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
