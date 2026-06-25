@@ -150,12 +150,18 @@ export const getArtistSongs = async (req, res) => {
  
         const songs = await serviceGetSongsByArtist(userName);
         //test
-        if (songs.length === 0) {
-            return res.status(200).json({
-                _debugMode: true,
-                message: "No songs found for this artist name",
-                whatTheServerReceived: userName || "WARNING: userName is undefined or empty!"
-            });
+       if (songs.length === 0) {
+            return res.status(200).json([
+                {
+                    id: "debug-id-123",
+                    name: "🔍 שרת הדיבאג מופעל",
+                    approved: false,
+                    genre: "טסט",
+                    // נדחוף את המידע לתוך שדה ה-lyrics או ה-album_name שמוצגים במסך
+                    lyrics: "No songs in DB",
+                    album_name: userName ? `קיבלתי מהטוקן: "${userName}"` : "אזהרה: userName ריק או undefined!"
+                }
+            ]);
         }
         res.status(200).json(songs);
     } catch (error) {
