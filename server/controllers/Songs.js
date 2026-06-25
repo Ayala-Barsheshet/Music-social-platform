@@ -140,33 +140,14 @@ export const deleteSong = async (req, res) => {
 
 export const getArtistSongs = async (req, res) => {
     try {
-        // 1. חילוץ ה-id וה-accessType שקיימים בוודאות בטוקן
         const { accessType, id: userId } = req.user;
 
         if (accessType !== 'artist' && accessType !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
         }
 
-        // 2. שליפת שם המשתמש מתוך טבלת המשתמשים באמצעות ה-id
-        const { data: userData, error: userError } = await db
-            .from('users')       // ודאי שזה שם טבלת המשתמשים שלך ב-Supabase
-            .select('username')  // ודאי שזה שם עמודת השם (username / name) בטבלה
-            .eq('id', userId)
-            .single();           // מחזיר אובייקט יחיד ולא מערך
-
-        if (userError || !userData) {
-            return res.status(404).json({ error: "Artist profile not found" });
-        }
-
-        // 3. שימוש בשם שנמצא כדי לשלוף את השירים שלו מה-Service
-        const userName = userData.username; 
-        console.log("Found userName from DB:", userName);
-
-        const songs = await serviceGetSongsByArtist(userName);
-        
-        // 4. החזרת השירים בצורת מערך תקין לפרונטאנד
+        const songs = await serviceGetSongsByArtist(userId);
         res.status(200).json(songs);
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

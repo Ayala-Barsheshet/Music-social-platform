@@ -190,17 +190,34 @@ const checkArtistPermissions = async (songId, token, fieldsToUpdate) => {
 };
 
 
-export const serviceGetSongsByArtist = async (artistName) => {
-  const { data, error } = await db
-    .from('songs')
-    .select('*, albums(name)')
-    .eq('artist_name', artistName) 
-    .order('created_at', { ascending: false });
- 
-  if (error) throw error;
- 
-  return data.map(({ albums, ...rest }) => ({
-    ...rest,
-    album_name: albums?.name ?? null,
-  }));
+export const serviceGetSongsByArtist = async (userId) => {
+    // 1. שליפת שם המשתמש מתוך טבלת המשתמשים באמצעות ה-ID
+    const { data: userData, error: userError } = await db
+        .from('users')       // ודאי שזה שם טבלת המשתמשים שלך ב-Supabase (למשל 'users' או 'profiles')
+        .select('username')  // ודאי שזה שם עמודת השם בטבלה
+        .eq('id', userId)
+        .single();
+
+    if (userError || !userData) {
+        throw new Error("Artist profile not found");
+    }
+
+    const userName = userData.username;
+
+    // 2. שליפת השירים על בסיס השם שמצאנו (הקוד הקיים והמקורי שלך)
+    const { data: songsData, error: songsError } = await db
+        .from('songs')
+        .select('*, albums(name)')
+        .eq('artist_name', userName)
+        .order('created_at', { ascending: false });
+
+    if (songsError) {
+        throw songsError;
+    }
+
+    // סידור מבנה הנתונים (החלפת אובייקט ה-albums ב-album_name שטוח)
+    return songsData.map(({ albums, ...rest }) => ({
+        ...rest,
+        album_name: albums?.name ?? null,
+    }));
 };
